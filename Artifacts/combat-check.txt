@@ -1,0 +1,10 @@
+PASS Joueur au sol avant le saut
+PASS Saut atteint une hauteur utile sans double saut
+PASS Retour au sol après le saut
+PASS Le tir émet un projectile
+PASS Une source audio joue la détonation
+PASS Le Cloueur inflige 14 dégâts directs
+PASS Un impact repousse légèrement la cible
+PASS Des fragments accompagnent impacts et mort
+PASS Les fragments se nettoient après leur durée de vie
+PASS Le saut permet de monter sur un sarcophage bas

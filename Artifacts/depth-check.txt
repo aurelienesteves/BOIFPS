@@ -1,0 +1,43 @@
+PASS Walkable upper level in room 1
+PASS Connected ramp route in room 1 (PathComplete, last=(0.00, 3.08, 39.00))
+PASS Player stands on upper level 1
+PASS Enemy spawns on the correct level 1
+PASS Walkable upper level in room 2
+PASS Connected ramp route in room 2 (PathComplete, last=(0.00, 2.67, 70.00))
+PASS Player stands on upper level 2
+PASS Enemy spawns on the correct level 2
+PASS Walkable upper level in room 3
+PASS Connected ramp route in room 3 (PathComplete, last=(0.00, 2.75, 96.00))
+PASS Player stands on upper level 3
+PASS Enemy spawns on the correct level 3
+PASS Walkable upper level in room 6
+PASS Connected ramp route in room 6 (PathComplete, last=(0.00, 3.25, 200.00))
+PASS Player stands on upper level 6
+PASS Enemy spawns on the correct level 6
+PASS Walkable upper level in room 7
+PASS Connected ramp route in room 7 (PathComplete, last=(0.00, 2.42, 226.00))
+PASS Player stands on upper level 7
+PASS Enemy spawns on the correct level 7
+PASS Walkable upper level in room 9
+PASS Connected ramp route in room 9 (PathComplete, last=(9.50, 2.92, 290.00))
+PASS Player stands on upper level 9
+PASS Enemy spawns on the correct level 9
+PASS Walkable upper level in room 10
+PASS Connected ramp route in room 10 (PathComplete, last=(32.00, 2.83, 168.00))
+PASS Player stands on upper level 10
+PASS Enemy spawns on the correct level 10
+PASS Player physically climbs new ramp 1 (y=3,08)
+PASS Player physically climbs new ramp 3 (y=2,68)
+PASS Player physically climbs new ramp 6 (y=3,28)
+PASS Player physically climbs new ramp 10 (y=2,88)
+PASS Player physically climbs new ramp 9 (y=2,88)
+PASS Burial damages the player on the upper floor
+PASS Ground burial does not damage the balcony
+PASS Jump evades burial
+PASS Reload announces the slowing field
+PASS Dash announces mirror readiness
+PASS Reflection confirmation is not throttled by readiness
+PASS Dash creates mines
+PASS Orbitals announce their count and duration
+PASS Relic pulses clean themselves up
+PASS Shooter cycles three attack patterns

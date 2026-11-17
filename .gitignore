@@ -1,0 +1,39 @@
+# Unity caches and local state
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Bb]uild/
+/[Bb]uilds/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+/.vs/
+/.idea/
+/.vscode/
+*.csproj
+*.sln
+*.slnx
+*.suo
+*.user
+*.pidb
+*.booproj
+*.opendb
+*.VC.db
+*.pdb
+*.mdb
+*.unitypackage
+# Local diagnostic output; text verification reports remain tracked
+/Artifacts/*.log
+/Artifacts/*.png
+# Machine configuration and credentials
+/.codex/
+/.agents/
+/.aws/
+.env
+.env.*
+*.keystore
+*.pfx
+*.p12
+.DS_Store
+Thumbs.db

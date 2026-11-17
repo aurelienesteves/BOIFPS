@@ -1,0 +1,22 @@
+PASS R sur un chargeur plein ne lance pas de recharge
+PASS Six tirs vident le chargeur et lancent la recharge automatique
+PASS Tir et nouvelle demande de recharge bloqués pendant la recharge
+PASS La pause fige la recharge
+PASS La recharge rend exactement six cartouches
+PASS R permet de recharger un chargeur entamé
+PASS La recharge manuelle bloque aussi le tir
+PASS Os bifide produit deux pointes pour une seule cartouche
+PASS Navigation vers une galerie : (-7.00, 2.60, 70.00)
+PASS Le chemin monte réellement à l’étage
+PASS Navigation vers une galerie : (-7.00, 2.40, 224.00)
+PASS Le chemin monte réellement à l’étage
+PASS Navigation vers une galerie : (7.00, 2.40, 224.00)
+PASS Le chemin monte réellement à l’étage
+PASS Le contrôleur joueur gravit la rampe du chœur
+PASS Le Séraphin se déplace en vol
+PASS Le Tisse-mur se déplace sur sa paroi
+PASS Le Tisse-mur est orienté selon la normale du mur
+PASS Une vraie surface soutient le Tisse-mur
+PASS Les projectiles touchent l’ennemi volant
+PASS Les deux nouveaux ennemis quittent la liste de combat à leur mort
+PASS Un Séraphin sous une tribune peut glisser vers une sortie et remonter

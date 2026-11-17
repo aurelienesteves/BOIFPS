@@ -1,0 +1,22 @@
+PASS Deux fosses physiques dans la salle 6
+PASS Le centre de la fosse est dépourvu de sol : 6
+PASS Deux fosses physiques dans la salle 7
+PASS Le centre de la fosse est dépourvu de sol : 7
+PASS Deux fosses physiques dans la salle 10
+PASS Le centre de la fosse est dépourvu de sol : 10
+PASS Une chute retire 20 PV et replace le joueur sur un point sûr
+PASS Deux Rampants contournent réellement par des côtés opposés
+PASS Le poursuivant direct atteint le joueur avant les contourneurs
+PASS Chœur des morts libère trois esprits
+PASS Les esprits poursuivent et blessent une autre cible
+PASS Les dégâts secondaires ne déclenchent pas de chaîne infinie
+PASS La sixième cartouche repart vers le joueur
+PASS Le retour du Pendule inflige un deuxième impact
+PASS Sablier ralentit les projectiles proches pendant la recharge
+PASS Le dash sème trois mines
+PASS Les mines explosent, blessent et se nettoient
+PASS Le miroir renvoie un projectile sans dégâts au joueur
+PASS Le miroir ne peut servir qu’une fois par dash
+PASS Une recharge à vide crée deux satellites
+PASS Le nombre de satellites est plafonné à quatre
+PASS Les reliquaires proposent une nouvelle relique parmi trois choix

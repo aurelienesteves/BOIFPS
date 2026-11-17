@@ -1,0 +1,146 @@
+PASS Initialisation et pause d’accueil
+PASS Navigation complète vers (0.00, 0.00, 288.00)
+PASS Navigation complète vers (64.00, 0.00, 160.00)
+PASS Composition salle 1
+PASS Portes verrouillées salle 1
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 1
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 1
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 1
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 1
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 1
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 1
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 1
+PASS Projectile joueur applique les dégâts
+PASS Fin du combat et portes ouvertes salle 1
+PASS Composition salle 2
+PASS Portes verrouillées salle 2
+PASS Agent sur NavMesh Psalmodieur
+PASS Ennemi peut rejoindre l’entrée de la salle 2
+PASS Agent sur NavMesh Psalmodieur
+PASS Ennemi peut rejoindre l’entrée de la salle 2
+PASS Agent sur NavMesh Psalmodieur
+PASS Ennemi peut rejoindre l’entrée de la salle 2
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 2
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 2
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 2
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 2
+PASS Ennemi hors sol actif : Séraphin
+PASS Ennemi hors sol actif : Séraphin
+PASS Fin du combat et portes ouvertes salle 2
+PASS Trois choix de relique et pause
+PASS Acquisition d’une seule relique et reprise
+PASS Composition salle 3
+PASS Portes verrouillées salle 3
+PASS Agent sur NavMesh Pénitent
+PASS Ennemi peut rejoindre l’entrée de la salle 3
+PASS Agent sur NavMesh Pénitent
+PASS Ennemi peut rejoindre l’entrée de la salle 3
+PASS Agent sur NavMesh Psalmodieur
+PASS Ennemi peut rejoindre l’entrée de la salle 3
+PASS Ennemi hors sol actif : Tisse-mur
+PASS Tisse-mur attaché à une paroi
+PASS Ennemi hors sol actif : Tisse-mur
+PASS Tisse-mur attaché à une paroi
+PASS Deuxième vague C et maintien du verrouillage
+PASS Fin du combat et portes ouvertes salle 3
+PASS Composition salle 6
+PASS Portes verrouillées salle 6
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 6
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 6
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 6
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 6
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 6
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 6
+PASS Agent sur NavMesh Psalmodieur
+PASS Ennemi peut rejoindre l’entrée de la salle 6
+PASS Agent sur NavMesh Psalmodieur
+PASS Ennemi peut rejoindre l’entrée de la salle 6
+PASS Agent sur NavMesh Pénitent
+PASS Ennemi peut rejoindre l’entrée de la salle 6
+PASS Agent sur NavMesh Pénitent
+PASS Ennemi peut rejoindre l’entrée de la salle 6
+PASS Ennemi hors sol actif : Séraphin
+PASS Ennemi hors sol actif : Tisse-mur
+PASS Tisse-mur attaché à une paroi
+PASS Portes maintenues avant les renforts temporisés
+PASS Quatre renforts arrivent pendant le combat
+PASS Fin du combat et portes ouvertes salle 6
+PASS Composition salle 7
+PASS Portes verrouillées salle 7
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Agent sur NavMesh Psalmodieur
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Agent sur NavMesh Psalmodieur
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Agent sur NavMesh Pénitent
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Agent sur NavMesh Pénitent
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Ennemi hors sol actif : Séraphin
+PASS Ennemi hors sol actif : Séraphin
+PASS Ennemi hors sol actif : Tisse-mur
+PASS Tisse-mur attaché à une paroi
+PASS Ennemi hors sol actif : Tisse-mur
+PASS Tisse-mur attaché à une paroi
+PASS Portes maintenues avant les renforts temporisés
+PASS Quatre renforts arrivent pendant le combat
+PASS Fin du combat et portes ouvertes salle 7
+PASS Composition salle 10
+PASS Portes verrouillées salle 10
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 10
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 10
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 10
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 10
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 10
+PASS Agent sur NavMesh Pénitent
+PASS Ennemi peut rejoindre l’entrée de la salle 10
+PASS Agent sur NavMesh Pénitent
+PASS Ennemi peut rejoindre l’entrée de la salle 10
+PASS Ennemi hors sol actif : Séraphin
+PASS Ennemi hors sol actif : Séraphin
+PASS Ennemi hors sol actif : Tisse-mur
+PASS Tisse-mur attaché à une paroi
+PASS Ennemi hors sol actif : Tisse-mur
+PASS Tisse-mur attaché à une paroi
+PASS Fin du combat et portes ouvertes salle 10
+PASS Composition salle 9
+PASS Portes verrouillées salle 9
+PASS Agent sur NavMesh Le Carillonneur
+PASS Ennemi peut rejoindre l’entrée de la salle 9
+PASS Boss actif sous 50 pour cent et cycle de phase 2 sans exception
+PASS Fin du combat et portes ouvertes salle 9
+PASS Victoire et bilan final
+PASS Nettoyage des dangers

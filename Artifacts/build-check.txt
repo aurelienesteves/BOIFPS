@@ -1,0 +1,51 @@
+PASS First reliquary: three distinct transformations 0
+PASS First reliquary: three distinct transformations 1
+PASS First reliquary: three distinct transformations 2
+PASS First reliquary: three distinct transformations 3
+PASS First reliquary: three distinct transformations 4
+PASS First reliquary: three distinct transformations 5
+PASS First reliquary: three distinct transformations 6
+PASS First reliquary: three distinct transformations 7
+PASS First reliquary: three distinct transformations 8
+PASS First reliquary: three distinct transformations 9
+PASS First reliquary: three distinct transformations 10
+PASS First reliquary: three distinct transformations 11
+PASS First reliquary: three distinct transformations 12
+PASS First reliquary: three distinct transformations 13
+PASS First reliquary: three distinct transformations 14
+PASS First reliquary: three distinct transformations 15
+PASS First reliquary: three distinct transformations 16
+PASS First reliquary: three distinct transformations 17
+PASS First reliquary: three distinct transformations 18
+PASS First reliquary: three distinct transformations 19
+PASS First reliquary: three distinct transformations 20
+PASS First reliquary: three distinct transformations 21
+PASS First reliquary: three distinct transformations 22
+PASS First reliquary: three distinct transformations 23
+PASS First reliquary: three distinct transformations 24
+PASS First reliquary: three distinct transformations 25
+PASS First reliquary: three distinct transformations 26
+PASS First reliquary: three distinct transformations 27
+PASS First reliquary: three distinct transformations 28
+PASS First reliquary: three distinct transformations 29
+PASS Later choices exclude owned relics and offer a new transformation
+PASS Scatter fires five pellets for one cartridge
+PASS Scatter has a wide cone and slower cadence
+PASS Scatter cannot bypass its slower cadence
+PASS Scatter rewards close range (near=66,42489, far=7,875702)
+PASS Scatter pellets expire at ten meters
+PASS Pendulum applies from the first cartridge
+PASS Pendulum hits on the outward flight
+PASS Pendulum hits the same target again on return
+PASS Moving changes the return trajectory
+PASS Burning deaths chain through another burning victim
+PASS Propagated fire deals damage over time
+PASS Fire propagation respects walls
+PASS Dash captures a hostile shot without damage and stores a riposte
+PASS One dash cannot capture twice
+PASS Firing consumes the stored riposte once
+PASS Riposte deals 45 damage and penetrates two enemies
+PASS Scatter + pendulum + mirror produce five empowered returning pellets
+PASS Combined pellets retain fire propagation
+PASS Pause freezes the transformed build
+PASS Cleanup removes transformed projectiles
