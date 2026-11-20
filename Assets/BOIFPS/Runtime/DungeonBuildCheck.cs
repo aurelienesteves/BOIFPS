@@ -118,6 +118,16 @@ namespace BOIFPS
             adjacent=Dummy(2,2,1); p.Shoot(); yield return new WaitForSeconds(.05f);
             bool guided=false; foreach(var shot in DungeonProjectile.Active) guided|=shot.Direction.x>.01f;
             Check(guided,"Aimanté bends the shot toward an off-axis enemy");
+            Check(DungeonArmament.Names.Length==13 && DungeonArmament.Profiles.Length==13 && DungeonArmament.Descriptions.Length==13,"Catalogue of thirteen complete weapons");
+            Check(new HashSet<WeaponTrait>(DungeonArmament.Traits).Count==23 && DungeonArmament.TraitDescriptions.Length==23,"Twenty-three distinct forge choices");
+            yield return Reset();
+            foreach(var modifier in DungeonArmament.Traits) p.AddTrait(modifier);
+            foreach(DungeonWeapon kind in System.Enum.GetValues(typeof(DungeonWeapon)))
+            {
+                yield return Reset(); p.Equip(kind); g.Upgrades.Add(2); g.Upgrades.Add(7);
+                p.Shoot();
+                Check(p.Ammo==5 && DungeonProjectile.Active.Count>=6 && System.Array.TrueForAll(FindObjectsByType<DungeonProjectile>(),b=>b.Boomerang),"Forged "+kind+" combines with scatter and pendulum");
+            }
             System.IO.Directory.CreateDirectory("Artifacts"); System.IO.File.WriteAllLines("Artifacts/build-check.txt",results);
             Debug.Log("BOIFPS BUILDS "+(failed?"FAILED":"PASSED")+" — "+results.Count+" checks");
             if(Application.isBatchMode) UnityEditor.EditorApplication.Exit(failed?1:0);

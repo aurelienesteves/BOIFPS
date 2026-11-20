@@ -57,3 +57,18 @@ PASS Seed blast carries the fire relic to its neighbours
 PASS Vif accelerates the equipped weapon
 PASS Réverbérant reflects a nail off a wall
 PASS Aimanté bends the shot toward an off-axis enemy
+PASS Catalogue of thirteen complete weapons
+PASS Twenty-three distinct forge choices
+PASS Forged Cloueur combines with scatter and pendulum
+PASS Forged Diapason combines with scatter and pendulum
+PASS Forged Semeur combines with scatter and pendulum
+PASS Forged Comète combines with scatter and pendulum
+PASS Forged Faucille combines with scatter and pendulum
+PASS Forged Caducée combines with scatter and pendulum
+PASS Forged Sextant combines with scatter and pendulum
+PASS Forged Orgue combines with scatter and pendulum
+PASS Forged Égide combines with scatter and pendulum
+PASS Forged Fuseau combines with scatter and pendulum
+PASS Forged Chapelet combines with scatter and pendulum
+PASS Forged Calice combines with scatter and pendulum
+PASS Forged Pilonnier combines with scatter and pendulum

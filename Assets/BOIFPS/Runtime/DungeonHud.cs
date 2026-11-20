@@ -183,31 +183,45 @@ namespace BOIFPS
         public void ShowRewards()
         {
             var g=DungeonGame.Instance; g.SetPaused(true); Choosing=true;
-            if(!g.Player.Armed)
-            {
-                Panel("CHOISIR UNE ARME","Votre arme vous accompagne jusqu’à la fin de la descente.");
-                for(int i=0;i<DungeonArmament.Names.Length;i++)
-                {
-                    var choice=(DungeonWeapon)i;
-                    Button(DungeonArmament.Names[i]+"\n"+DungeonArmament.Descriptions[i],430+i*135,()=>{ g.Player.Equip(choice); ShowForge(); },110,22);
-                }
-            }
+            if(!g.Player.Armed) ShowWeapons(0);
             else ShowForge();
         }
-        void ShowForge()
+
+        const int CardsPerPage=4;
+        void PageControls(int page,int count,System.Action<int> show)
+        {
+            int pages=(count+CardsPerPage-1)/CardsPerPage;
+            if(page>0) Button("Page précédente",800,()=>show(page-1));
+            if(page+1<pages) Button("Page suivante",880,()=>show(page+1));
+        }
+        void ShowWeapons(int page)
         {
             var player=DungeonGame.Instance.Player;
-            int count=0;
-            foreach(var trait in DungeonArmament.Traits) if((player.Traits&trait)==0) count++;
-            if(count==0) { ShowRelics(); return; }
-            Panel("FORGER LE "+DungeonArmament.Names[(int)player.Weapon].ToUpperInvariant(),"Choisissez un adjectif. Ses effets se cumulent avec les reliques.");
-            int row=0;
-            for(int i=0;i<DungeonArmament.Traits.Length;i++)
+            var count=DungeonArmament.Names.Length;
+            Panel("CHOISIR UNE ARME","Votre arme vous accompagne jusqu’à la fin de la descente.   "+(page+1)+" / "+((count+CardsPerPage-1)/CardsPerPage));
+            for(int row=0;row<CardsPerPage && page*CardsPerPage+row<count;row++)
             {
-                var trait=DungeonArmament.Traits[i];
-                if((player.Traits&trait)!=0) continue;
-                Button(trait+"\n"+DungeonArmament.TraitDescriptions[i],430+row++*135,()=>{ player.AddTrait(trait); ShowRelics(); },110,22);
+                int id=page*CardsPerPage+row;
+                Button(DungeonArmament.Names[id]+"\n"+DungeonArmament.Descriptions[id],360+row*105,()=>
+                { player.Equip((DungeonWeapon)id); ShowForge(); },96,22);
             }
+            PageControls(page,count,ShowWeapons);
+        }
+        void ShowForge(int page=0)
+        {
+            var player=DungeonGame.Instance.Player;
+            var available=new List<int>();
+            for(int i=0;i<DungeonArmament.Traits.Length;i++)
+                if((player.Traits&DungeonArmament.Traits[i])==0) available.Add(i);
+            if(available.Count==0) { ShowRelics(); return; }
+            Panel("FORGE • "+DungeonArmament.Names[(int)player.Weapon],"Choisissez un adjectif pour cette arme.   "+(page+1)+" / "+((available.Count+CardsPerPage-1)/CardsPerPage));
+            for(int row=0;row<CardsPerPage && page*CardsPerPage+row<available.Count;row++)
+            {
+                int id=available[page*CardsPerPage+row];
+                var trait=DungeonArmament.Traits[id];
+                Button(trait+"\n"+DungeonArmament.TraitDescriptions[id],360+row*105,()=>{player.AddTrait(trait); ShowRelics();},96,22);
+            }
+            PageControls(page,available.Count,ShowForge);
         }
         void ShowRelics()
         {

@@ -34,6 +34,7 @@ namespace BOIFPS
         public WeaponTrait Traits { get; private set; }
         public bool Armed { get; private set; }
         public string WeaponName => DungeonArmament.Names[(int)Weapon]+(Traits==0?"":" "+Traits.ToString().ToLowerInvariant().Replace(",",""));
+        bool Forged(WeaponTrait trait) => (Traits & trait)!=0;
         public void AddTrait(WeaponTrait trait) { Traits|=trait; }
         Transform ornament;
         public void Equip(DungeonWeapon choice)
@@ -49,6 +50,12 @@ namespace BOIFPS
             }
             if(choice==DungeonWeapon.Semeur)
                 AddWeaponPart("Bulbe germinal",new Vector3(0,.44f,.14f),new Vector3(.75f,.85f,.9f),new Color(.58f,.95f,.28f),PrimitiveType.Sphere);
+            if((int)choice>=3)
+            {
+                int index=(int)choice-3;
+                for(int i=0;i<1+index%4;i++)
+                    AddWeaponPart(DungeonArmament.Names[(int)choice],new Vector3((i-index%4*.5f)*.55f,.45f,.18f+i*.12f),new Vector3(.38f,.55f+index*.04f,.55f),DungeonArmament.Hue(choice),(index%2==0)?PrimitiveType.Sphere:PrimitiveType.Cylinder);
+            }
             weapon.localScale=choice==DungeonWeapon.Semeur?new Vector3(.34f,.32f,.48f):choice==DungeonWeapon.Diapason?new Vector3(.14f,.15f,.78f):new Vector3(.18f,.20f,.65f);
             weapon.GetComponent<Renderer>().sharedMaterial=DungeonGame.Instance.Material(choice==DungeonWeapon.Semeur?new Color(.3f,.55f,.23f):choice==DungeonWeapon.Diapason?new Color(.32f,.62f,.72f):new Color(.60f,.52f,.37f));
         }
@@ -63,7 +70,7 @@ namespace BOIFPS
         {
             get
             {
-                float delay=Weapon==DungeonWeapon.Semeur?.7f:Weapon==DungeonWeapon.Diapason?.32f:.16f;
+                float delay=DungeonArmament.Profiles[(int)Weapon].Interval;
                 return (Has(2)?delay+.39f:delay)*(Has(0)?.8f:1)*((Traits&WeaponTrait.Vif)!=0?.8f:1);
             }
         }
@@ -170,9 +177,10 @@ namespace BOIFPS
             bool empowered=EmpoweredShot; EmpoweredShot=false;
             if(Has(2))
             {
-                for(int i=-2;i<=2;i++) Fire(i*7,14f/18,empowered,i%2==0?0:4);
+                for(int i=-2;i<=2;i++) WeaponVolley(i*7,14f/18,empowered,i%2==0?0:4);
             }
-            else Fire(0,1,empowered);
+            else WeaponVolley(0,1,empowered,0);
+            if(Forged(WeaponTrait.Jumeau)) Fire(8,.55f,empowered);
             if(empowered) DungeonRelics.Notify(10,"Riposte tirée • dégâts ×2,5 + pénétration",transform.position+Vector3.up*.1f);
             g.Gunshot(); g.Hud.Shot();
             
@@ -191,7 +199,7 @@ namespace BOIFPS
                 DungeonRelics.Notify(13,"Souffle de cendre",origin);
             }
             if(Has(8)) DungeonRelics.Notify(8,"Champ actif • tirs hostiles à 25 %",transform.position+Vector3.up*.1f);
-            reloadWasEmpty=Ammo==0; Reloading=true; reloadEnds=Time.time+ReloadDuration; g.Sound(.75f);
+            reloadWasEmpty=Ammo==0; Reloading=true; reloadEnds=Time.time+ReloadDuration*(Forged(WeaponTrait.Hâtif)?.7f:1); g.Sound(.75f);
         }
         public bool Dash(Vector3 direction)
         {
@@ -199,7 +207,7 @@ namespace BOIFPS
             if(g.Paused || g.Finished || DashCooldown>0) return false;
             direction=Vector3.ProjectOnPlane(direction,Vector3.up);
             dashDirection=direction.sqrMagnitude>.01f?direction.normalized:transform.forward; dashRemaining=.18f;
-            DashCooldown=Has(5)?.9f:1.2f; mirrorReady=Has(10) && !EmpoweredShot; mirrorUntil=Time.time+.55f; g.Sound(.6f);
+            DashCooldown=(Has(5)?.9f:1.2f)*(Forged(WeaponTrait.Bondissant)?.75f:1); mirrorReady=Has(10) && !EmpoweredShot; mirrorUntil=Time.time+.55f; g.Sound(.6f);
             if(Has(9)) { DungeonRelics.Notify(9,"3 mines semées",transform.position+Vector3.up*.1f); StartCoroutine(DungeonRelics.DashMines(this)); }
             if(ReflectReady) DungeonRelics.Notify(10,"Capture armée • 0,55 s",transform.position+Vector3.up*.1f);
             return true;
@@ -227,14 +235,42 @@ namespace BOIFPS
             }
             jumpBufferedUntil=Time.time+.12f;
         }
-        void Fire(float angle,float coefficient,bool empowered,float elevation=0)
+        void WeaponVolley(float yaw,float power,bool empowered,float pitch)
+        {
+            switch(Weapon)
+            {
+                case DungeonWeapon.Sextant:
+                    for(int i=-1;i<=1;i++) Fire(yaw-i*4,power,empowered,pitch,i*.42f);
+                    break;
+                case DungeonWeapon.Caducée:
+                    Fire(yaw,power,empowered,pitch,-.12f,-1);
+                    Fire(yaw,power,empowered,pitch,.12f,1);
+                    break;
+                case DungeonWeapon.Orgue:
+                    for(int i=-2;i<=2;i++) Fire(yaw+(Ammo%2==0?6*i:0),power,empowered,pitch+(Ammo%2==1?6*i:0));
+                    break;
+                case DungeonWeapon.Chapelet when Ammo==0:
+                    for(int i=0;i<12;i++) Fire(yaw+i*30,power,empowered,pitch);
+                    break;
+                default: Fire(yaw,power,empowered,pitch,0,Ammo%2==0?1:-1); break;
+            }
+        }
+        void Fire(float angle,float coefficient,bool empowered,float elevation=0,float lateral=0,int handedness=1)
         {
             Vector3 direction=Quaternion.AngleAxis(angle,View.transform.up)*Quaternion.AngleAxis(elevation,View.transform.right)*View.transform.forward;
             bool pendulum=Has(7);
             float damage=(Has(1)?23.4f:18)*coefficient*(empowered?2.5f:1);
+            var profile=DungeonArmament.Profiles[(int)Weapon];
+            damage*=profile.Power;
+            if(Forged(WeaponTrait.Aérien) && !Grounded) damage*=1.35f;
+            if(Forged(WeaponTrait.Ancré) && PlanarVelocity.sqrMagnitude<1) damage*=1.3f;
+            if(Forged(WeaponTrait.Intrépide) && Health<40) damage*=1.5f;
+            if(Forged(WeaponTrait.Inaugural) && Ammo==MagazineCapacity-1) damage*=1.6f;
+            if(Forged(WeaponTrait.Terminal) && Ammo==0) damage*=1.8f;
             int penetration=pendulum?99:1+(Has(4)?1:0)+(empowered?1:0);
-            var shot=DungeonProjectile.Spawn(View.transform.position+direction*.5f,direction,pendulum?30:Weapon==DungeonWeapon.Semeur?18:65,damage,true,penetration,Has(3),false,pendulum,false,Has(2)?10:pendulum?11:40,Has(2),empowered);
-            shot.Imprint(Weapon,Traits);
+            penetration+=(Weapon==DungeonWeapon.Fuseau?2:0)+(Forged(WeaponTrait.Perforant)?1:0);
+            var shot=DungeonProjectile.Spawn(View.transform.position+direction*.5f+View.transform.right*lateral,direction,pendulum?Mathf.Min(30,profile.Speed):profile.Speed,damage,true,penetration,Has(3)||Forged(WeaponTrait.Ardent),false,pendulum,false,Has(2)?10:pendulum?11:40,Has(2),empowered);
+            shot.Imprint(Weapon,Traits,handedness);
         }
         public void Damage(float amount, Vector3 source)
         {

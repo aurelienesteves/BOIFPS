@@ -17,6 +17,16 @@ namespace BOIFPS
             if (!condition) { failed = true; Debug.LogError("BOIFPS CHECK: " + label); }
         }
         void Update() { if (DungeonGame.Instance != null && !DungeonGame.Instance.Finished) DungeonGame.Instance.Player.Heal(100); }
+        static void PickFromLastPage(DungeonHud hud)
+        {
+            for(int page=0;page<8;page++)
+            {
+                var buttons=hud.GetComponentsInChildren<UnityEngine.UI.Button>();
+                var next=System.Array.Find(buttons,button=>button.name=="Page suivante");
+                if(next==null) { buttons[0].onClick.Invoke(); return; }
+                next.onClick.Invoke();
+            }
+        }
         IEnumerator Start()
         {
             var g = DungeonGame.Instance;
@@ -92,10 +102,10 @@ namespace BOIFPS
                 {
                     g.Hud.ShowRewards();
                     var buttons = g.Hud.GetComponentsInChildren<UnityEngine.UI.Button>();
-                    Check(buttons.Length == 3 && g.Paused, "Trois choix de relique et pause");
-                    if (buttons.Length > 0) buttons[0].onClick.Invoke();
-                    Check(g.Player.Armed && g.Hud.Choosing,"Arme équipée avant la forge");
-                    g.Hud.GetComponentsInChildren<UnityEngine.UI.Button>()[0].onClick.Invoke();
+                    Check(buttons.Length == 5 && g.Paused, "Quatre armes et navigation du catalogue en pause");
+                    PickFromLastPage(g.Hud);
+                    Check(g.Player.Armed && g.Player.Weapon==DungeonWeapon.Pilonnier && g.Hud.Choosing,"Dernière page de l’arsenal accessible");
+                    PickFromLastPage(g.Hud);
                     Check(g.Player.Traits!=0 && g.Hud.Choosing,"Adjectif forgé avant la relique");
                     g.Hud.GetComponentsInChildren<UnityEngine.UI.Button>()[0].onClick.Invoke();
                     Check(g.Upgrades.Count == 1 && !g.Paused, "Acquisition d’une seule relique et reprise");

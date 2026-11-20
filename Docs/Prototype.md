@@ -32,11 +32,47 @@ Le premier reliquaire permet de choisir une arme pour la descente, de lui donner
 
 | Arme | Manière de jouer |
 | --- | --- |
-| Cloueur | Tir direct toutes les 0,16 s pour suivre une cible isolée. |
-| Diapason | Tir toutes les 0,32 s. À chaque impact, un arc atteint le voisin visible le plus proche dans un rayon de 5 m et lui inflige 80 % des dégâts du tir. |
-| Semeur | Tir toutes les 0,7 s. La graine se fixe sur la première cible ou sur le décor et éclate après 0,7 s. Les ennemis visibles à 3 m subissent l’explosion. Une graine arrivée en bout de course peut aussi éclater en l’air. |
+| Cloueur | Tir précis et rapide. Maintenez la pression sur une cible. |
+| Diapason | À l’impact, un arc touche un second ennemi visible à moins de 5 m. |
+| Semeur | Plantez une graine dans le décor ou sur une cible. Elle éclate après 0,7 s dans un rayon de 3 m. |
+| Comète en cage | Lâche un noyau lent qui accélère en vol. |
+| Croissant de suie | Décrit un arc horizontal, alternativement à gauche et à droite. |
+| Caducée | Deux serpents ondulent en sens opposés le long du viseur. |
+| Sextant des veilleurs | Trois aiguilles convergent à 6 m puis se séparent. |
+| Orgue des côtes | Alternez entre une nappe horizontale et une salve verticale. |
+| Égide errante | Projette un disque qui efface le premier tir hostile rencontré. |
+| Fuseau du vide | Traverse trois cibles et gagne en puissance avec la distance. |
+| Chapelet brisé | La dernière perle libère une couronne de douze tirs autour de vous. |
+| Calice affamé | Une mise à mort directe rend 5 PV. Visez les ennemis affaiblis. |
+| Pilonnier du glas | Un impact direct ébranle les autres ennemis visibles à 3 m. |
 
-**Vif** réduit de 20 % l’intervalle entre les attaques. **Réverbérant** donne un rebond sur le décor. **Aimanté** guide les projectiles vers un ennemi visible dans leur cône avant, à moins de 8 m. Chaque adjectif s’applique à la gerbe d’Os bifide. Le Pendule ramène les tirs vers le joueur après leur trajet aller. Les arcs du Diapason et les explosions du Semeur peuvent transmettre le feu de Moelle brûlante.
+Les pages de la forge présentent les adjectifs encore disponibles. Leurs effets se cumulent avec les reliques équipées.
+
+| Adjectif | Effet |
+| --- | --- |
+| Vif | Réduit de 20 % le délai entre deux attaques. |
+| Réverbérant | Les tirs rebondissent une fois sur le décor avant de poursuivre leur course. |
+| Aimanté | Les tirs dévient vers un ennemi visible devant eux. |
+| Ardent | Les impacts directs embrasent les cibles. |
+| Perforant | Traverse une cible de plus. |
+| Allongé | Portée aller augmentée de 50 %. |
+| Fulgurant | Vitesse initiale des projectiles augmentée de 40 %. |
+| Massif | Double la largeur des projectiles et leur zone de contact. |
+| Aérien | Tirer en vol augmente les dégâts de 35 %. |
+| Ancré | Tirer presque immobile augmente les dégâts de 30 %. |
+| Intrépide | Sous 40 PV, les tirs infligent 50 % de dégâts supplémentaires. |
+| Inaugural | La première cartouche du chargeur inflige 60 % de dégâts supplémentaires. |
+| Terminal | La dernière cartouche inflige 80 % de dégâts supplémentaires. |
+| Hâtif | Recharge 30 % plus vite. |
+| Bondissant | Réduit de 25 % la récupération du dash. |
+| Siphonnant | Une élimination directe rend 2 PV. |
+| Impitoyable | Inflige 45 % de dégâts supplémentaires aux ennemis sous la moitié de leurs PV. |
+| Chasseur | Inflige 35 % de dégâts supplémentaires aux cibles volantes ou murales. |
+| Brutal | À moins de 4 m de trajet, les impacts gagnent 40 % de dégâts. |
+| Lointain | Après 8 m de trajet, les impacts gagnent 50 % de dégâts. |
+| Mordant | Sur une cible déjà en feu, inflige 40 % de dégâts supplémentaires. |
+| Jumeau | Ajoute une pointe latérale à 55 % de puissance à chaque attaque. |
+| Relanceur | Chaque élimination directe retranche 0,4 s au délai du dash. |
 
 ## Parcours jouable
 

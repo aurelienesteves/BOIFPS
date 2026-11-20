@@ -41,10 +41,20 @@ namespace BOIFPS
         }
         DungeonWeapon weapon;
         WeaponTrait traits;
-        bool bounced, planted;
-        public void Imprint(DungeonWeapon kind,WeaponTrait modifiers)
+        bool bounced, planted, shieldSpent;
+        float contactRadius=.07f;
+        int curveSign;
+        bool Forged(WeaponTrait trait) => (traits & trait)!=0;
+        public void Imprint(DungeonWeapon kind,WeaponTrait modifiers,int handedness=1)
         {
-            weapon=kind; traits=modifiers;
+            weapon=kind; traits=modifiers; curveSign=handedness;
+            if(Forged(WeaponTrait.Allongé)) remaining*=1.5f;
+            if(Forged(WeaponTrait.Fulgurant)) speed*=1.4f;
+            if(kind==DungeonWeapon.Égide) contactRadius=.5f;
+            if(Forged(WeaponTrait.Massif)) contactRadius*=2;
+            transform.localScale*=contactRadius/.07f;
+            if((int)kind>=3 && !empowered && !burning && !boomerang)
+                skin.sharedMaterial=trail.sharedMaterial=DungeonGame.Instance.Emissive(DungeonArmament.Hue(kind),3);
             if(kind==DungeonWeapon.Semeur) { transform.localScale*=2; trail.startWidth=.18f; }
         }
         void Plant(Vector3 point,Transform target,float power)
@@ -81,6 +91,15 @@ namespace BOIFPS
                 if(target!=null) direction=Vector3.RotateTowards(direction,(target.AimPoint-transform.position).normalized,7*Time.deltaTime,0);
             }
             if(!returning && (traits&WeaponTrait.Aimanté)!=0) Guide();
+            if(!returning)
+            {
+                if(weapon==DungeonWeapon.Comète) speed+=75*Time.deltaTime;
+                if(weapon==DungeonWeapon.Faucille || weapon==DungeonWeapon.Caducée)
+                {
+                    float turn=weapon==DungeonWeapon.Faucille?50:135*Mathf.Cos(lifetime*13);
+                    direction=Quaternion.AngleAxis(curveSign*turn*Time.deltaTime,Vector3.up)*direction;
+                }
+            }
             float multiplier=SpeedMultiplier;
             bool slowed=multiplier<1;
             if(slowed!=wasSlowed)
@@ -91,7 +110,18 @@ namespace BOIFPS
             float step = Mathf.Min(speed * multiplier * Time.deltaTime, remaining);
             if(returning) step=Mathf.Min(step,Vector3.Distance(transform.position,DungeonGame.Instance.Player.View.transform.position)-.2f);
             if (step <= 0) return;
-            var hits = Physics.SphereCastAll(transform.position, friendly ? .07f : .16f, direction, step, ~0, QueryTriggerInteraction.Ignore);
+            if(weapon==DungeonWeapon.Égide && !shieldSpent)
+            {
+                foreach(var other in Active)
+                {
+                    if(other==null || other.Friendly) continue;
+                    var offset=other.transform.position-transform.position;
+                    float along=Mathf.Clamp(Vector3.Dot(offset,direction),0,step);
+                    if((offset-direction*along).sqrMagnitude<.8f && DungeonRelics.ClearPath(transform.position,other.transform.position) && other.Absorb())
+                    { shieldSpent=true; DungeonFeedback.Burst(other.transform.position,Vector3.up,false); break; }
+                }
+            }
+            var hits = Physics.SphereCastAll(transform.position, friendly ? contactRadius : .16f, direction, step, ~0, QueryTriggerInteraction.Ignore);
             System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
             foreach (var hit in hits)
             {
@@ -102,9 +132,30 @@ namespace BOIFPS
                 {
                     if (!struck.Add(enemy)) continue;
                     float impactDamage=damage*(falloff?Mathf.Lerp(1,.35f,Mathf.Clamp01((traveled+hit.distance)/10)):1);
+                    if(enemy.Health<=0) continue;
+                    float distance=traveled+hit.distance;
+                    if(weapon==DungeonWeapon.Fuseau) impactDamage*=1+Mathf.Clamp01(distance/12);
+                    if(Forged(WeaponTrait.Brutal) && distance<4) impactDamage*=1.4f;
+                    if(Forged(WeaponTrait.Lointain) && distance>8) impactDamage*=1.5f;
+                    if(Forged(WeaponTrait.Impitoyable) && enemy.Health<enemy.MaxHealth*.5f) impactDamage*=1.45f;
+                    if(Forged(WeaponTrait.Chasseur) && enemy.SurfaceEnemy) impactDamage*=1.35f;
+                    if(Forged(WeaponTrait.Mordant) && enemy.IsBurning) impactDamage*=1.4f;
+                    if(weapon==DungeonWeapon.Pilonnier)
+                    {
+                        foreach(var neighbour in enemy.Room.Enemies.ToArray())
+                            if(neighbour!=enemy && Vector3.Distance(neighbour.AimPoint,enemy.AimPoint)<=3 && DungeonRelics.ClearPath(enemy.AimPoint,neighbour.AimPoint))
+                                neighbour.Damage(impactDamage*.65f,burning,neighbour.AimPoint-enemy.AimPoint,false);
+                    }
                     Plant(hit.point,enemy.transform,impactDamage);
                     if(weapon==DungeonWeapon.Diapason) DungeonArmament.Arc(enemy,enemy.AimPoint,impactDamage,burning);
                     enemy.Damage(weapon==DungeonWeapon.Semeur?impactDamage*.4f:impactDamage,burning,direction,!secondary); DungeonGame.Instance.Hud.HitConfirm();
+                    if(enemy.Health<=0)
+                    {
+                        var owner=DungeonGame.Instance.Player;
+                        if(weapon==DungeonWeapon.Calice) owner.Heal(5);
+                        if(Forged(WeaponTrait.Siphonnant)) owner.Heal(2);
+                        if(Forged(WeaponTrait.Relanceur)) owner.DashCooldown=Mathf.Max(0,owner.DashCooldown-.4f);
+                    }
                     DungeonFeedback.Burst(hit.point,-direction,true); DungeonGame.Instance.ImpactSound(false);
                     if (--pierce > 0) continue;
                 }
