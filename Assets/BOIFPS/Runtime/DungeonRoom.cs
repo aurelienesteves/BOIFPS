@@ -49,16 +49,24 @@ namespace BOIFPS
             foreach (var gate in Gates) gate.SetActive(true);
             DungeonGame.Instance.Sound(.7f);
             yield return new WaitForSeconds(.6f);
+            int cleared=DungeonGame.Instance.Cleared;
+            if(Index!=9 && cleared<3)
+            {
+                SpawnOpening(cleared);
+                yield return new WaitUntil(() => Enemies.Count==0);
+                Complete();
+                yield break;
+            }
             switch (Index)
             {
                 case 12: case 13:
                     Spawn(1,-GallerySpan,Index==12?3:-3,Height); Spawn(1,GallerySpan,3,Height);
                     Spawn(4,0,0,Height+1); Spawn(0,-2,-5); Spawn(0,2,7); Spawn(2,0,7); break;
                 case 1:
-                    Spawn(0,-3,3); Spawn(0,3,3); Spawn(0,-3,7); Spawn(0,3,7); Spawn(0,0,8); Spawn(0,-2,0); Spawn(0,2,0); break;
+                    Spawn(0,-3,3); Spawn(0,3,3); Spawn(0,0,8); Spawn(0,-2,0); Spawn(0,2,0); break;
                 case 2:
-                    Spawn(1,-7,6,2.6f); Spawn(1,7,6,2.6f); Spawn(1,0,6,2.6f);
-                    Spawn(0,-3,3); Spawn(0,3,3); Spawn(0,-3,-1); Spawn(0,3,-1); Spawn(4,-4,2,3.8f); Spawn(4,4,2,3.8f); break;
+                    Spawn(1,-7,6,2.6f); Spawn(1,7,6,2.6f);
+                    Spawn(0,-3,3); Spawn(0,3,3); Spawn(4,-4,2,3.8f); Spawn(4,4,2,3.8f); break;
                 case 3:
                     Spawn(2,0,6); Spawn(2,0,0); Spawn(1,-3,7); Spawn(5,-10,-6); Spawn(5,10,-6);
                     yield return new WaitUntil(() => Enemies.Count == 0);
@@ -67,20 +75,44 @@ namespace BOIFPS
                     yield return new WaitForSeconds(.65f);
                     Spawn(0,-3,2); Spawn(0,3,2); Spawn(0,-3,6); Spawn(0,3,6); Spawn(0,0,6); Spawn(4,0,-2,3.2f); Spawn(4,0,3,3.2f); break;
                 case 6:
-                    Spawn(0,-4,1); Spawn(0,4,-1); Spawn(0,-1,7); Spawn(0,3,7); Spawn(0,-8,-6); Spawn(0,8,1);
-                    Spawn(1,-8,7); Spawn(1,8,7); Spawn(2,0,5); Spawn(2,0,8); Spawn(4,0,-4,3.5f); Spawn(5,10,7); break;
+                    Spawn(0,-4,1); Spawn(0,4,-1); Spawn(0,3,7);
+                    Spawn(1,-8,7); Spawn(1,8,7); Spawn(2,0,5); Spawn(4,0,-4,3.5f); Spawn(5,10,7); break;
                 case 7:
-                    Spawn(0,-3,2); Spawn(0,3,2); Spawn(0,-3,8); Spawn(0,3,8); Spawn(0,-10,-2); Spawn(0,10,-2);
-                    Spawn(1,-7,0,2.4f); Spawn(1,7,0,2.4f); Spawn(2,0,8); Spawn(2,4,8);
-                    Spawn(4,-2,7,3.8f); Spawn(4,3,7,3.8f); Spawn(5,-10,7); Spawn(5,10,7); break;
+                    Spawn(0,-3,2); Spawn(0,3,2); Spawn(0,-3,8);
+                    Spawn(1,-7,0,2.4f); Spawn(1,7,0,2.4f); Spawn(2,0,8);
+                    Spawn(4,-2,7,3.8f); Spawn(5,10,7); break;
                 case 10:
-                    Spawn(0,-5,3); Spawn(0,5,3); Spawn(0,-5,7); Spawn(0,5,7); Spawn(0,0,7);
-                    Spawn(2,-5,8); Spawn(2,5,8); Spawn(4,-5,-6,3.2f); Spawn(4,5,-6,3.2f); Spawn(5,-10,-7); Spawn(5,10,7); break;
+                    Spawn(0,-5,3); Spawn(0,5,3); Spawn(0,0,7);
+                    Spawn(2,-5,8); Spawn(2,5,8); Spawn(4,-5,-6,3.2f); Spawn(4,5,-6,3.2f); Spawn(5,-10,-7); break;
                 case 9: Spawn(3, 0, 6); break;
             }
             if(Index==6 || Index==7) { ReinforcementsPending=true; StartCoroutine(Reinforcements()); }
             yield return new WaitUntil(() => Enemies.Count == 0 && !ReinforcementsPending);
             Complete();
+        }
+        void SpawnOpening(int cleared)
+        {
+            var player=DungeonGame.Instance.Player.transform.position;
+            var positions=new List<Vector3>();
+            var path=new NavMeshPath();
+            // Choose reachable ground away from whichever entrance the player used.
+            for(int x=-8;x<=8;x+=4)
+                for(int z=-8;z<=8;z+=4)
+                {
+                    Vector3 point=transform.position+new Vector3(x,0,z);
+                    if(ContainsPit(point,.6f) || !NavMesh.SamplePosition(point,out var ground,1,NavMesh.AllAreas)) continue;
+                    if(NavMesh.CalculatePath(ground.position,player,NavMesh.AllAreas,path) && path.status==NavMeshPathStatus.PathComplete)
+                        positions.Add(ground.position);
+                }
+            positions.Sort((a,b)=>(b-player).sqrMagnitude.CompareTo((a-player).sqrMagnitude));
+            int count=2+cleared;
+            for(int i=0;i<count;i++)
+            {
+                Vector3 spot=positions.Count>0?positions[0]:DungeonDanger.GroundBelow(transform.position+Vector3.up*6);
+                Vector3 local=spot-transform.position;
+                Spawn(i==1?1:0,local.x,local.z,local.y+.05f);
+                positions.RemoveAll(p=>(p-spot).sqrMagnitude<12);
+            }
         }
         void Warn(Vector3[] positions)
         {

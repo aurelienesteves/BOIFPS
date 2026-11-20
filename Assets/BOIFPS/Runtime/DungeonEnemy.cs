@@ -38,7 +38,7 @@ namespace BOIFPS
         public void Initialize(int kind, DungeonRoom room)
         {
             Kind = kind; Room = room;
-            Health = MaxHealth = kind == 0 ? 36 : kind == 1 ? 72 : kind == 2 ? 144 : kind==3?2200:kind==4?54:72;
+            Health = MaxHealth = kind == 0 ? 18 : kind == 1 ? 36 : kind == 2 ? 90 : kind==3?1350:kind==4?30:45;
             lane=room.Enemies.Count; lastSeen=DungeonGame.Instance.Player.transform.position;
             if(!SurfaceEnemy)
             {

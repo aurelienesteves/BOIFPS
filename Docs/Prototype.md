@@ -84,19 +84,21 @@ Une salle ferme ses portes lorsque le joueur pénètre suffisamment à l’inté
 
 Les salles conservent des portes alignées, mais possèdent des dispositions de couvert différentes. Les tombeaux bas peuvent être franchis par le joueur ; les ennemis les contournent grâce à la navigation.
 
+Les trois premières salles de combat ordinaires accueillent successivement 2, 3 et 4 ennemis, dont un Psalmodieur à chaque fois. Les renforts arrivent uniquement dans les rencontres ultérieures décrites ci-dessous.
+
 | Salle | Disposition | Rencontre |
 | --- | --- | --- |
-| A | Nef, tombeaux bas et balcon à 3 m avec deux rampes | 7 Rampants |
-| B | Autel, galerie à 2,6 m et deux rampes latérales | 3 Psalmodieurs, 4 Rampants, 2 Séraphins |
+| A | Nef, tombeaux bas et balcon à 3 m avec deux rampes | 5 Rampants |
+| B | Autel, galerie à 2,6 m et deux rampes latérales | 2 Psalmodieurs, 2 Rampants, 2 Séraphins |
 | C | Crypte en croix et pont central à 2,6 m | 2 Pénitents, 1 Psalmodieur, 2 Tisse-murs ; puis 5 Rampants et 2 Séraphins |
-| D | Tombeaux, deux fosses et tribune reliée à un pont à 3,2 m | 12 ennemis au départ, puis 4 renforts temporisés |
-| E | Deux tribunes, passerelle, quatre rampes et deux fosses | 14 ennemis au départ, puis 4 renforts temporisés |
-| F | Cloison, deux fosses, balcons et passerelle à 2,8 m | 5 Rampants, 2 Pénitents, 2 Séraphins, 2 Tisse-murs |
-| Boss | Cercle rituel, piliers et deux tribunes à 2,8 m | Carillonneur à 2 200 PV |
+| D | Tombeaux, deux fosses et tribune reliée à un pont à 3,2 m | 8 ennemis au départ, puis 4 renforts temporisés |
+| E | Deux tribunes, passerelle, quatre rampes et deux fosses | 8 ennemis au départ, puis 4 renforts temporisés |
+| F | Cloison, deux fosses, balcons et passerelle à 2,8 m | 3 Rampants, 2 Pénitents, 2 Séraphins, 1 Tisse-mur |
+| Boss | Cercle rituel, piliers et deux tribunes à 2,8 m | Carillonneur à 1 350 PV |
 
 Les Rampants approchent à 9,4 m/s. Un sur trois poursuit directement ; les autres cherchent des points latéraux à 4,5–7,5 m du joueur, par un côté gauche ou droit, avant de refermer leur approche. Ils cherchent des chemins praticables autour des obstacles et des fosses. Certains Pénitents visent la trajectoire anticipée du joueur ; les autres poursuivent directement. Les tireurs reculent de près et cherchent des positions décalées pour créer des tirs croisés.
 
-Les annonces et récupérations sont plus courtes : bond des Rampants annoncé pendant 0,25 s, charge des Pénitents pendant 0,62 s et tirs des Psalmodieurs pendant 0,45 à 0,55 s selon le motif. Les tirs se déplacent à 10–18 m/s selon le motif pour les Psalmodieurs et à 14 m/s pour les créatures hors sol. Le groupe vise une limite de quatre attaquants engagés simultanément. Les PV restent identiques à la version précédente : le rythme vient du nombre et de la vitesse.
+Les annonces et récupérations sont plus courtes : bond des Rampants annoncé pendant 0,25 s, charge des Pénitents pendant 0,62 s et tirs des Psalmodieurs pendant 0,45 à 0,55 s selon le motif. Les tirs se déplacent à 10–18 m/s selon le motif pour les Psalmodieurs et à 14 m/s pour les créatures hors sol. Le groupe vise une limite de quatre attaquants engagés simultanément.
 
 Le **Séraphin** vole autour du joueur, tire après une annonce et remplace un tir sur trois par un piqué vers une position verrouillée. Le **Tisse-mur** se déplace sur les surfaces verticales : son orientation suit la normale du mur, il tourne aux angles et inverse son trajet devant une rupture de paroi. Il prépare ses tirs depuis les côtés de l’arène. Les deux créatures peuvent être touchées par les projectiles ordinaires et comptent dans le verrouillage des portes.
 
@@ -123,11 +125,11 @@ Os bifide produit aussi cinq pointes revenantes avec Pendule, tout en consommant
 
 | Ennemi | PV | Tirs directs de base pour le tuer |
 | --- | --- | --- |
-| Rampant | 36 | 2 |
-| Psalmodieur | 72 | 4 |
-| Pénitent | 144 | 8 |
-| Séraphin | 54 | 3 |
-| Tisse-mur | 72 | 4 |
+| Rampant | 18 | 1 |
+| Psalmodieur | 36 | 2 |
+| Pénitent | 90 | 5 |
+| Séraphin | 30 | 2 |
+| Tisse-mur | 45 | 3 |
 
 Les dégâts et effectifs ont été ajustés pour laisser des occasions de se repositionner pendant la recharge. Le boss conserve ses deux phases et dispose de pauses légèrement plus longues entre ses attaques. La difficulté réelle reste à évaluer en jeu.
 

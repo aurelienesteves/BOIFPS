@@ -61,7 +61,7 @@ namespace BOIFPS
             bool bends=false; foreach(var b in DungeonProjectile.Active) bends|=b.Returning && b.Direction.x>.1f;
             Check(bends,"Moving changes the return trajectory");
             yield return Reset(); g.Upgrades.Add(3);
-            var seed=Dummy(0,0,3); var relay=Dummy(0,2,3); var end=Dummy(0,5,3); relay.Damage(26,false);
+            var seed=Dummy(0,0,3); var relay=Dummy(0,2,3); var end=Dummy(1,5,3); relay.Damage(relay.MaxHealth-10,false);
             seed.Damage(100,true); yield return new WaitForSeconds(.2f);
             Check(relay.Health<=0 && end.IsBurning && Mathf.Abs(end.Health-22)<.1f,"Burning deaths chain through another burning victim");
             float burnHealth=end.Health; yield return new WaitForSeconds(1.05f);
@@ -69,7 +69,7 @@ namespace BOIFPS
             yield return Reset(); g.Upgrades.Add(3); seed=Dummy(0,0,3); target=Dummy(0,3,3);
             var wall=g.Cube("Test fire obstruction",new Vector3(1.5f,1.5f,3),new Vector3(.3f,3,4),Color.gray);
             Physics.SyncTransforms(); seed.Damage(100,true); yield return new WaitForSeconds(.2f);
-            Check(target.Health==36 && !target.IsBurning,"Fire propagation respects walls"); Destroy(wall);
+            Check(target.Health==target.MaxHealth && !target.IsBurning,"Fire propagation respects walls"); Destroy(wall);
             yield return Reset(); g.Upgrades.Add(10); p.DashCooldown=0; p.Dash(Vector3.right); p.enabled=false;
             var incoming=DungeonProjectile.Spawn(p.transform.position+new Vector3(0,1,1.2f),Vector3.back,20,20,false);
             float health=p.Health; yield return new WaitForSeconds(.15f);
@@ -78,9 +78,9 @@ namespace BOIFPS
             target=Dummy(2,0,-1); var behind=Dummy(2,0,2); p.Shoot();
             Check(!p.EmpoweredShot,"Firing consumes the stored riposte once");
             yield return new WaitForSeconds(.2f);
-            Check(Mathf.Abs(target.Health-99)<.1f && Mathf.Abs(behind.Health-99)<.1f,"Riposte deals 45 damage and penetrates two enemies");
+            Check(Mathf.Abs(target.MaxHealth-target.Health-45)<.1f && Mathf.Abs(behind.MaxHealth-behind.Health-45)<.1f,"Riposte deals 45 damage and penetrates two enemies");
             yield return Reset(); foreach(int id in new[]{2,3,7,10}) g.Upgrades.Add(id);
-            p.DashCooldown=0; p.Dash(Vector3.right); p.Reflect(); p.enabled=false; target=Dummy(2,0,-3); p.Shoot();
+            p.DashCooldown=0; p.Dash(Vector3.right); p.Reflect(); p.enabled=false; target=Dummy(3,0,-3); p.Shoot();
             bool combined=DungeonProjectile.Active.Count==5;
             foreach(var b in DungeonProjectile.Active) combined&=b.Boomerang && Mathf.Abs(b.DamageAmount-35)<.01f;
             Check(combined,"Scatter + pendulum + mirror produce five empowered returning pellets");

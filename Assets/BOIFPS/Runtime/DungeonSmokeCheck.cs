@@ -47,7 +47,9 @@ namespace BOIFPS
                 int index=room.Index;
                 g.Player.Teleport(DungeonDanger.GroundBelow(room.transform.position+Vector3.back*7+Vector3.up*6)+Vector3.up*.1f);
                 yield return new WaitForSeconds(1.4f);
-                int expected = index == 1 ? 7 : index==2?9:index == 3 ? 5 : index == 6 ? 12 : index == 7 ? 14 : index==10?11:index>=12?6:1;
+                bool opening=g.Cleared<3 && index!=9;
+                int expected = opening?2+g.Cleared:index==1?5:index==2?6:index==3?5:index==6?8:index==7?8:index==10?8:index>=12?6:1;
+                if(opening) Check(room.Enemies.TrueForAll(e=>e.Kind==0?e.Health==18:e.Kind==1 && e.Health==36),"Ouverture avec ennemis à un ou deux tirs");
                 Check(room.Active && room.Enemies.Count == expected, "Composition salle " + index);
                 Check(room.Gates.TrueForAll(gate => gate.activeSelf), "Portes verrouillées salle " + index);
                 foreach (var e in room.Enemies)
@@ -83,13 +85,13 @@ namespace BOIFPS
                     Check(boss != null && boss.PhaseTwo, "Boss actif sous 50 pour cent et cycle de phase 2 sans exception");
                 }
                 foreach (var e in room.Enemies.ToArray()) e.Damage(10000, false,Vector3.zero,false);
-                if (index == 3)
+                if (!opening && index == 3)
                 {
                     yield return new WaitForSeconds(1.2f);
                     Check(room.Enemies.Count == 7 && room.Active, "Deuxième vague C et maintien du verrouillage");
                     foreach (var e in room.Enemies.ToArray()) e.Damage(10000, false,Vector3.zero,false);
                 }
-                if(index==6 || index==7)
+                if(!opening && (index==6 || index==7))
                 {
                     Check(room.Active && room.ReinforcementsPending,"Portes maintenues avant les renforts temporisés");
                     yield return new WaitForSeconds(4.2f);

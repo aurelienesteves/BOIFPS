@@ -53,13 +53,13 @@ namespace BOIFPS
             ClearEnemies(); yield return null;
             var secondaryVictim=Dummy(0,3,4); secondaryVictim.Damage(10000,false,Vector3.zero,false);
             Check(FindObjectsByType<DungeonProjectile>().Length==0,"Les dégâts secondaires ne déclenchent pas de chaîne infinie");
-            g.Upgrades.Clear(); g.Upgrades.Add(7); target=Dummy(2,0,2);
+            g.Upgrades.Clear(); g.Upgrades.Add(7); target=Dummy(3,0,2);
             p.Reload(); yield return new WaitForSeconds(1.25f);
             for(int i=0;i<6;i++) { p.Shoot(); if(i<5) yield return new WaitForSeconds(.18f); }
             yield return new WaitForSeconds(.25f);
             Check(System.Array.Exists(FindObjectsByType<DungeonProjectile>(),b=>b.Returning),"Les pointes du Pendule repartent vers le joueur");
             yield return new WaitForSeconds(.45f);
-            Check(target.Health<36,"Le retour du Pendule inflige un deuxième impact");
+            Check(target.Health<target.MaxHealth-6*18,"Le retour du Pendule inflige un deuxième impact");
             ClearEnemies(); g.Upgrades.Clear(); yield return new WaitForSeconds(.6f);
             g.Upgrades.Add(8); p.Shoot(); p.Reload();
             var slow=DungeonProjectile.Spawn(p.transform.position+new Vector3(0,1,3),Vector3.right,10,1,false);
