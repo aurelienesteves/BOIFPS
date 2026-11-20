@@ -10,7 +10,9 @@ Prototype solo de roguelite d’horreur en vue subjective : un donjon procédura
 
 ZQSD/WASD : déplacement ; souris : viser/tirer ; Espace : saut ; Maj : dash ; R : recharge ; E : reliquaire ; Échap : pause. Le clavier peut être changé dans le menu.
 
-Le premier reliquaire propose trois styles parmi la gerbe à courte portée, les pointes revenantes, le feu qui se propage et la capture de projectiles pour préparer une riposte. Les reliques suivantes peuvent combiner leurs effets. Le plan, les embranchements et la répartition des arènes sont tirés à chaque descente. Le Cloître suspendu et les Escaliers du beffroi ont des galeries de hauteur, d’écartement et de profondeur variables. La Plume du clocher donne un second saut et le Poumon de cendre transforme les cartouches restantes en dégâts de proximité lors d’une recharge anticipée. La graine du plan figure en pause et peut être rejouée en renseignant Dungeon Seed sur DungeonGame dans l’inspecteur avant Play.
+Au premier reliquaire, choisissez le Cloueur pour le tir direct, le Diapason pour toucher deux ennemis proches ou le Semeur pour poser des charges qui éclatent après 0,7 seconde. Chaque reliquaire permet de forger un adjectif encore disponible sur cette arme. Vif accélère le tir, Réverbérant permet un rebond et Aimanté infléchit les trajectoires vers une cible visible. Les adjectifs se cumulent pendant la descente.
+
+Le premier choix de relique propose trois styles parmi la gerbe à courte portée, les pointes revenantes, le feu qui se propage et la capture de projectiles pour préparer une riposte. Les reliques suivantes peuvent combiner leurs effets. Le plan, les embranchements et la répartition des arènes sont tirés à chaque descente. Le Cloître suspendu et les Escaliers du beffroi ont des galeries de hauteur, d’écartement et de profondeur variables. La Plume du clocher donne un second saut et le Poumon de cendre transforme les cartouches restantes en dégâts de proximité lors d’une recharge anticipée. La graine du plan figure en pause et peut être rejouée en renseignant Dungeon Seed sur DungeonGame dans l’inspecteur avant Play.
 
 ## Documentation et vérification
 

@@ -26,6 +26,18 @@ Le Cloueur tire à 6,25 coups/s, inflige 18 dégâts par pointe et propulse ses 
 
 Les tirs déclenchent une détonation dédiée, un éclair lumineux, le recul de l’arme, une impulsion de caméra et l’expansion du réticule. Les impacts produisent des fragments et une petite poussée sur la cible. Les morts ont une rupture sonore et des débris supplémentaires.
 
+## Armes et forge
+
+Le premier reliquaire permet de choisir une arme pour la descente, de lui donner un adjectif, puis de prendre une relique. Les reliquaires suivants ajoutent chacun un adjectif encore disponible et une relique. Le nom complet de l’arme apparaît près des munitions et dans le menu pause.
+
+| Arme | Manière de jouer |
+| --- | --- |
+| Cloueur | Tir direct toutes les 0,16 s pour suivre une cible isolée. |
+| Diapason | Tir toutes les 0,32 s. À chaque impact, un arc atteint le voisin visible le plus proche dans un rayon de 5 m et lui inflige 80 % des dégâts du tir. |
+| Semeur | Tir toutes les 0,7 s. La graine se fixe sur la première cible ou sur le décor et éclate après 0,7 s. Les ennemis visibles à 3 m subissent l’explosion. Une graine arrivée en bout de course peut aussi éclater en l’air. |
+
+**Vif** réduit de 20 % l’intervalle entre les attaques. **Réverbérant** donne un rebond sur le décor. **Aimanté** guide les projectiles vers un ennemi visible dans leur cône avant, à moins de 8 m. Chaque adjectif s’applique à la gerbe d’Os bifide. Le Pendule ramène les tirs vers le joueur après leur trajet aller. Les arcs du Diapason et les explosions du Semeur peuvent transmettre le feu de Moelle brûlante.
+
 ## Parcours jouable
 
 Le plan comprend 11 à 15 salles. Une route principale relie l’entrée, un reliquaire, l’antichambre et le boss. Des branches peuvent se ramifier à leur tour et un second reliquaire récompense l’exploration. Les portes et la carte suivent les connexions générées. Chaque arène se verrouille à l’entrée. Le nombre total de combats dépend du plan. Dans l’inspecteur de DungeonGame, une graine différente de zéro reproduit le plan et ses dimensions. Zéro tire une graine à chaque nouvelle partie. Les offres et les soins utilisent leur propre tirage.

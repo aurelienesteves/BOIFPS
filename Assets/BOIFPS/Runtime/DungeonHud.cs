@@ -75,7 +75,7 @@ namespace BOIFPS
             var g = DungeonGame.Instance;
             if (g.Player == null) return;
             status.text = $"PV {Mathf.CeilToInt(g.Player.Health)} / 100\nDASH {(g.Player.DashCooldown <= 0 ? "PRÊT" : g.Player.DashCooldown.ToString("0.0") + " s")}";
-            status.text += g.Player.Reloading ? $"\nRECHARGE  {g.Player.ReloadRemaining:0.0} s" : $"\nCLOUEUR  {g.Player.Ammo} / 6   [R]";
+            status.text += g.Player.Reloading ? $"\nRECHARGE  {g.Player.ReloadRemaining:0.0} s" : $"\n{g.Player.WeaponName}  {g.Player.Ammo} / 6   [R]";
             room.text = (g.Current == null ? "Les Fosses de la Communion" : g.Current.name) + (g.Current != null && g.Current.Active ? "  —  COMBAT" : "");
             string acquired = ""; for(int n=0;n<DungeonGame.ItemNames.Length;n++) if(g.Upgrades.Contains(n))
                 acquired += "<color=#"+ColorUtility.ToHtmlStringRGB(DungeonRelics.ColorFor(n))+">"+DungeonGame.ItemNames[n]+"</color>   ";
@@ -146,7 +146,7 @@ namespace BOIFPS
         {
             if (!visible) { Close(); return; }
             var g = DungeonGame.Instance;
-            Panel("PAUSE", "Graine du donjon "+g.Seed);
+            Panel("PAUSE",g.Player.WeaponName+"\nGraine du donjon "+g.Seed);
             Button("Reprendre", 400, () => { Close(); g.SetPaused(false); });
             Button($"Sensibilité : {g.Sensitivity:0.00} — cliquer pour changer", 480, () => { g.Sensitivity = g.Sensitivity >= .2f ? .05f : g.Sensitivity + .05f; ShowPause(true); });
             Button($"Champ de vision : {g.FieldOfView:0}° — cliquer pour changer", 560, () => { g.FieldOfView = g.FieldOfView >= 110 ? 80 : g.FieldOfView + 5; ShowPause(true); });
@@ -183,6 +183,35 @@ namespace BOIFPS
         public void ShowRewards()
         {
             var g=DungeonGame.Instance; g.SetPaused(true); Choosing=true;
+            if(!g.Player.Armed)
+            {
+                Panel("CHOISIR UNE ARME","Votre arme vous accompagne jusqu’à la fin de la descente.");
+                for(int i=0;i<DungeonArmament.Names.Length;i++)
+                {
+                    var choice=(DungeonWeapon)i;
+                    Button(DungeonArmament.Names[i]+"\n"+DungeonArmament.Descriptions[i],430+i*135,()=>{ g.Player.Equip(choice); ShowForge(); },110,22);
+                }
+            }
+            else ShowForge();
+        }
+        void ShowForge()
+        {
+            var player=DungeonGame.Instance.Player;
+            int count=0;
+            foreach(var trait in DungeonArmament.Traits) if((player.Traits&trait)==0) count++;
+            if(count==0) { ShowRelics(); return; }
+            Panel("FORGER LE "+DungeonArmament.Names[(int)player.Weapon].ToUpperInvariant(),"Choisissez un adjectif. Ses effets se cumulent avec les reliques.");
+            int row=0;
+            for(int i=0;i<DungeonArmament.Traits.Length;i++)
+            {
+                var trait=DungeonArmament.Traits[i];
+                if((player.Traits&trait)!=0) continue;
+                Button(trait+"\n"+DungeonArmament.TraitDescriptions[i],430+row++*135,()=>{ player.AddTrait(trait); ShowRelics(); },110,22);
+            }
+        }
+        void ShowRelics()
+        {
+            var g=DungeonGame.Instance;
             Panel("CHOISIR UNE RELIQUE",g.Upgrades.Count==0?"Choisissez votre première façon de combattre.\nLes reliques suivantes pourront transformer et combiner ses effets.":"Un seul don. Combinez ses effets avec vos reliques équipées.");
             var choices=RewardChoices();
             if(choices.Count==0) Button("Continuer",430,()=>{ Choosing=false; Close(); g.SetPaused(false); });

@@ -39,6 +39,32 @@ namespace BOIFPS
             bullet.trail = go.AddComponent<TrailRenderer>(); bullet.trail.sharedMaterial = g.Emissive(bullet.tint,2); bullet.trail.time = .12f; bullet.trail.startWidth = .09f; bullet.trail.endWidth = 0;
             return bullet;
         }
+        DungeonWeapon weapon;
+        WeaponTrait traits;
+        bool bounced, planted;
+        public void Imprint(DungeonWeapon kind,WeaponTrait modifiers)
+        {
+            weapon=kind; traits=modifiers;
+            if(kind==DungeonWeapon.Semeur) { transform.localScale*=2; trail.startWidth=.18f; }
+        }
+        void Plant(Vector3 point,Transform target,float power)
+        {
+            if(weapon!=DungeonWeapon.Semeur || planted) return;
+            planted=true; DungeonSeedCharge.Plant(point,target,power*2,burning);
+        }
+        void Guide()
+        {
+            DungeonEnemy best=null; float nearest=8;
+            var room=DungeonGame.Instance.Current;
+            if(room==null) return;
+            foreach(var enemy in room.Enemies)
+            {
+                var to=enemy.AimPoint-transform.position;
+                if(to.magnitude>=nearest || Vector3.Dot(direction,to.normalized)<.55f || !DungeonRelics.ClearPath(transform.position,enemy.AimPoint)) continue;
+                nearest=to.magnitude; best=enemy;
+            }
+            if(best!=null) direction=Vector3.RotateTowards(direction,(best.AimPoint-transform.position).normalized,3*Time.deltaTime,0);
+        }
         void Update()
         {
             if(absorbed) return;
@@ -54,6 +80,7 @@ namespace BOIFPS
                 var target=DungeonRelics.Nearest(transform.position,25);
                 if(target!=null) direction=Vector3.RotateTowards(direction,(target.AimPoint-transform.position).normalized,7*Time.deltaTime,0);
             }
+            if(!returning && (traits&WeaponTrait.Aimanté)!=0) Guide();
             float multiplier=SpeedMultiplier;
             bool slowed=multiplier<1;
             if(slowed!=wasSlowed)
@@ -75,7 +102,9 @@ namespace BOIFPS
                 {
                     if (!struck.Add(enemy)) continue;
                     float impactDamage=damage*(falloff?Mathf.Lerp(1,.35f,Mathf.Clamp01((traveled+hit.distance)/10)):1);
-                    enemy.Damage(impactDamage,burning,direction,!secondary); DungeonGame.Instance.Hud.HitConfirm();
+                    Plant(hit.point,enemy.transform,impactDamage);
+                    if(weapon==DungeonWeapon.Diapason) DungeonArmament.Arc(enemy,enemy.AimPoint,impactDamage,burning);
+                    enemy.Damage(weapon==DungeonWeapon.Semeur?impactDamage*.4f:impactDamage,burning,direction,!secondary); DungeonGame.Instance.Hud.HitConfirm();
                     DungeonFeedback.Burst(hit.point,-direction,true); DungeonGame.Instance.ImpactSound(false);
                     if (--pierce > 0) continue;
                 }
@@ -90,12 +119,18 @@ namespace BOIFPS
                 else if(friendly)
                 {
                     DungeonFeedback.Burst(hit.point,hit.normal,false);
+                    if(!returning && !bounced && (traits&WeaponTrait.Réverbérant)!=0 && remaining>hit.distance+.1f)
+                    {
+                        bounced=true; remaining-=hit.distance; traveled+=hit.distance;
+                        direction=Vector3.Reflect(direction,hit.normal); transform.position=hit.point+hit.normal*.15f; return;
+                    }
+                    Plant(hit.point+hit.normal*.15f,null,damage);
                     if(boomerang && !returning) { transform.position=hit.point+hit.normal*.2f; BeginReturn(); return; }
                 }
                 Destroy(gameObject); return;
             }
             transform.position += direction * step; remaining -= step; traveled+=step;
-            if (remaining <= 0) { if(boomerang && !returning) BeginReturn(); else Destroy(gameObject); }
+            if (remaining <= 0) { Plant(transform.position,null,damage); if(boomerang && !returning) BeginReturn(); else Destroy(gameObject); }
         }
         void BeginReturn() { DungeonRelics.Notify(7,"Retour • alignez les ennemis",transform.position); returning=true; speed=22; remaining=40; struck.Clear(); }
         public bool Absorb() { if(absorbed) return false; absorbed=true; Destroy(gameObject); return true; }

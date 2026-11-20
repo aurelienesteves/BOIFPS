@@ -30,7 +30,43 @@ namespace BOIFPS
         bool reloadWasEmpty,mirrorReady;
         float mirrorUntil;
         public bool EmpoweredShot { get; private set; }
-        public float ShotInterval => (Has(2)?.55f:.16f)*(Has(0)?.8f:1);
+        public DungeonWeapon Weapon { get; private set; }
+        public WeaponTrait Traits { get; private set; }
+        public bool Armed { get; private set; }
+        public string WeaponName => DungeonArmament.Names[(int)Weapon]+(Traits==0?"":" "+Traits.ToString().ToLowerInvariant().Replace(",",""));
+        public void AddTrait(WeaponTrait trait) { Traits|=trait; }
+        Transform ornament;
+        public void Equip(DungeonWeapon choice)
+        {
+            Weapon=choice; Armed=true;
+            if(ornament!=null) Destroy(ornament.gameObject);
+            ornament=new GameObject("Garniture").transform;
+            ornament.SetParent(weapon,false);
+            if(choice==DungeonWeapon.Diapason)
+            {
+                for(int side=-1;side<=1;side+=2)
+                    AddWeaponPart("Branche vibrante",new Vector3(side*.8f,0,.55f),new Vector3(.32f,.34f,.8f),Color.cyan,PrimitiveType.Cube);
+            }
+            if(choice==DungeonWeapon.Semeur)
+                AddWeaponPart("Bulbe germinal",new Vector3(0,.44f,.14f),new Vector3(.75f,.85f,.9f),new Color(.58f,.95f,.28f),PrimitiveType.Sphere);
+            weapon.localScale=choice==DungeonWeapon.Semeur?new Vector3(.34f,.32f,.48f):choice==DungeonWeapon.Diapason?new Vector3(.14f,.15f,.78f):new Vector3(.18f,.20f,.65f);
+            weapon.GetComponent<Renderer>().sharedMaterial=DungeonGame.Instance.Material(choice==DungeonWeapon.Semeur?new Color(.3f,.55f,.23f):choice==DungeonWeapon.Diapason?new Color(.32f,.62f,.72f):new Color(.60f,.52f,.37f));
+        }
+        void AddWeaponPart(string label,Vector3 position,Vector3 scale,Color glow,PrimitiveType shape)
+        {
+            var part=DungeonGame.Instance.Cube(label,Vector3.zero,scale,glow,ornament,shape);
+            part.transform.localPosition=position; part.transform.localRotation=Quaternion.identity;
+            part.GetComponent<Collider>().enabled=false;
+            part.GetComponent<Renderer>().sharedMaterial=DungeonGame.Instance.Emissive(glow,2);
+        }
+        public float ShotInterval
+        {
+            get
+            {
+                float delay=Weapon==DungeonWeapon.Semeur?.7f:Weapon==DungeonWeapon.Diapason?.32f:.16f;
+                return (Has(2)?delay+.39f:delay)*(Has(0)?.8f:1)*((Traits&WeaponTrait.Vif)!=0?.8f:1);
+            }
+        }
         public Vector3 PlanarVelocity { get; private set; }
         Keyboard boundKeyboard;
         bool boundAzerty;
@@ -197,7 +233,8 @@ namespace BOIFPS
             bool pendulum=Has(7);
             float damage=(Has(1)?23.4f:18)*coefficient*(empowered?2.5f:1);
             int penetration=pendulum?99:1+(Has(4)?1:0)+(empowered?1:0);
-            DungeonProjectile.Spawn(View.transform.position+direction*.5f,direction,pendulum?30:65,damage,true,penetration,Has(3),false,pendulum,false,Has(2)?10:pendulum?11:40,Has(2),empowered);
+            var shot=DungeonProjectile.Spawn(View.transform.position+direction*.5f,direction,pendulum?30:Weapon==DungeonWeapon.Semeur?18:65,damage,true,penetration,Has(3),false,pendulum,false,Has(2)?10:pendulum?11:40,Has(2),empowered);
+            shot.Imprint(Weapon,Traits);
         }
         public void Damage(float amount, Vector3 source)
         {

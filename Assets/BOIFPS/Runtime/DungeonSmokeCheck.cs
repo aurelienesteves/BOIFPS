@@ -88,12 +88,16 @@ namespace BOIFPS
                 }
                 yield return new WaitForSecondsRealtime(.2f);
                 Check(room.Cleared && room.Gates.TrueForAll(gate => !gate.activeSelf), "Fin du combat et portes ouvertes salle " + index);
-                if (index == 2)
+                if (!g.Player.Armed)
                 {
                     g.Hud.ShowRewards();
                     var buttons = g.Hud.GetComponentsInChildren<UnityEngine.UI.Button>();
                     Check(buttons.Length == 3 && g.Paused, "Trois choix de relique et pause");
                     if (buttons.Length > 0) buttons[0].onClick.Invoke();
+                    Check(g.Player.Armed && g.Hud.Choosing,"Arme équipée avant la forge");
+                    g.Hud.GetComponentsInChildren<UnityEngine.UI.Button>()[0].onClick.Invoke();
+                    Check(g.Player.Traits!=0 && g.Hud.Choosing,"Adjectif forgé avant la relique");
+                    g.Hud.GetComponentsInChildren<UnityEngine.UI.Button>()[0].onClick.Invoke();
                     Check(g.Upgrades.Count == 1 && !g.Paused, "Acquisition d’une seule relique et reprise");
                 }
             }

@@ -84,7 +84,7 @@ namespace BOIFPS
             DungeonRelics.CreateOrbitals(p); DungeonRelics.CreateOrbitals(p);
             Check(FindObjectsByType<DungeonOrbital>().Length==4,"Le nombre de satellites est plafonné à quatre");
             foreach(var orbital in FindObjectsByType<DungeonOrbital>()) Destroy(orbital.gameObject);
-            g.Upgrades.Clear(); g.Hud.ShowRewards();
+            g.Upgrades.Clear(); p.Equip(DungeonWeapon.Cloueur); foreach(var trait in DungeonArmament.Traits) p.AddTrait(trait); g.Hud.ShowRewards();
             var buttons=g.Hud.GetComponentsInChildren<UnityEngine.UI.Button>();
             bool novel=false; foreach(var button in buttons) foreach(var label in button.GetComponentsInChildren<TMPro.TMP_Text>()) for(int i=6;i<DungeonGame.ItemNames.Length;i++) if(label.text.Contains(DungeonGame.ItemNames[i])) novel=true;
             Check(buttons.Length==3 && novel,"Les reliquaires proposent une nouvelle relique parmi trois choix");

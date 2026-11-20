@@ -51,3 +51,9 @@ PASS Pause freezes the transformed build
 PASS Cleanup removes transformed projectiles
 PASS Five remaining cartridges deal 25 reload damage
 PASS Second jump gains height in midair
+PASS Diapason chains to a nearby second target
+PASS Seed sticks before exploding
+PASS Seed blast carries the fire relic to its neighbours
+PASS Vif accelerates the equipped weapon
+PASS Réverbérant reflects a nail off a wall
+PASS Aimanté bends the shot toward an off-axis enemy

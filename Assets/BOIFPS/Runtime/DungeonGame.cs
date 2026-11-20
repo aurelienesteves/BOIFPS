@@ -365,6 +365,7 @@ namespace BOIFPS
         public void CleanupHazards()
         {
             if(Player!=null) Player.GetComponent<DungeonRelics>().ClearChains();
+            foreach(var seed in FindObjectsByType<DungeonSeedCharge>()) { seed.enabled=false; Destroy(seed.gameObject); }
             foreach (var p in FindObjectsByType<DungeonProjectile>()) Destroy(p.gameObject);
             foreach (var z in FindObjectsByType<DungeonDanger>()) Destroy(z.gameObject);
             foreach(var mine in FindObjectsByType<DungeonMine>()) Destroy(mine.gameObject);
