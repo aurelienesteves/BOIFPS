@@ -19,6 +19,14 @@ namespace BOIFPS
         public int Cleared, CombatTotal;
         [SerializeField] int dungeonSeed;
         public int Seed { get; private set; }
+        int[] bestiaryOrder;
+        int bestiaryIndex;
+        internal int NextBestiaryKind()
+        {
+            int kind=bestiaryOrder[bestiaryIndex];
+            bestiaryIndex=(bestiaryIndex+1)%bestiaryOrder.Length;
+            return kind;
+        }
         public readonly List<int> Parents = new List<int>();
         public float Elapsed;
         public float Sensitivity = .10f, FieldOfView = 95;
@@ -69,6 +77,14 @@ namespace BOIFPS
         void GenerateDungeon()
         {
             Seed = dungeonSeed == 0 ? System.Guid.NewGuid().GetHashCode() : dungeonSeed;
+            var bestiaryRandom = new System.Random(Seed ^ 0x157C);
+            bestiaryOrder = new int[DungeonEnemy.BestiaryCount];
+            for(int i=0;i<bestiaryOrder.Length;i++)
+            {
+                int slot=bestiaryRandom.Next(i+1);
+                bestiaryOrder[i]=bestiaryOrder[slot];
+                bestiaryOrder[slot]=DungeonEnemy.FirstBestiaryKind+i;
+            }
             var random = new System.Random(Seed);
             var directions = new[] { Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left };
             // Grow a winding main route along two perpendicular axes so it cannot trap itself.

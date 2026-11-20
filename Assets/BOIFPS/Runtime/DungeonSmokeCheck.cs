@@ -40,6 +40,21 @@ namespace BOIFPS
                 Check(NavMesh.CalculatePath(Vector3.zero, destination, NavMesh.AllAreas, path) && path.status == NavMeshPathStatus.PathComplete, "Navigation complète vers " + destination);
             }
             g.Hud.ShowPause(false); g.SetPaused(false); g.Player.enabled = false;
+            var seen=new HashSet<int>();
+            var startRoom=g.Rooms[0];
+            for(int i=0;i<DungeonEnemy.BestiaryCount;i++)
+            {
+                var enemy=startRoom.Spawn(g.NextBestiaryKind(),0,-3);
+                float deadline=Time.time+5;
+                while(!enemy.Attacking && Time.time<deadline) yield return null;
+                bool announced=enemy.Attacking;
+                while(enemy.Attacking && Time.time<deadline) yield return null;
+                Check(seen.Add(enemy.Kind) && announced && !enemy.Attacking && enemy.Health<=54,
+                    "Espèce distincte, attaque annoncée et terminée : "+enemy.name);
+                enemy.Damage(10000,false,Vector3.zero,false);
+                g.CleanupHazards();
+                yield return null;
+            }
             var encounters=g.Rooms.FindAll(tile=>tile.IsCombat && tile.Index!=9);
             encounters.Add(g.Rooms.Find(tile=>tile.Index==9));
             foreach(var room in encounters)

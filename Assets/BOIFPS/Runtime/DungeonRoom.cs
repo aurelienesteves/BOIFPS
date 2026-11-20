@@ -60,31 +60,31 @@ namespace BOIFPS
             switch (Index)
             {
                 case 12: case 13:
-                    Spawn(1,-GallerySpan,Index==12?3:-3,Height); Spawn(1,GallerySpan,3,Height);
-                    Spawn(4,0,0,Height+1); Spawn(0,-2,-5); Spawn(0,2,7); Spawn(2,0,7); break;
+                    SpawnEncounter(1,-GallerySpan,Index==12?3:-3,Height); SpawnEncounter(1,GallerySpan,3,Height);
+                    SpawnEncounter(4,0,0,Height+1); SpawnEncounter(0,-2,-5); SpawnEncounter(0,2,7); SpawnEncounter(2,0,7); break;
                 case 1:
-                    Spawn(0,-3,3); Spawn(0,3,3); Spawn(0,0,8); Spawn(0,-2,0); Spawn(0,2,0); break;
+                    SpawnEncounter(0,-3,3); SpawnEncounter(0,3,3); SpawnEncounter(0,0,8); SpawnEncounter(0,-2,0); SpawnEncounter(0,2,0); break;
                 case 2:
-                    Spawn(1,-7,6,2.6f); Spawn(1,7,6,2.6f);
-                    Spawn(0,-3,3); Spawn(0,3,3); Spawn(4,-4,2,3.8f); Spawn(4,4,2,3.8f); break;
+                    SpawnEncounter(1,-7,6,2.6f); SpawnEncounter(1,7,6,2.6f);
+                    SpawnEncounter(0,-3,3); SpawnEncounter(0,3,3); SpawnEncounter(4,-4,2,3.8f); SpawnEncounter(4,4,2,3.8f); break;
                 case 3:
-                    Spawn(2,0,6); Spawn(2,0,0); Spawn(1,-3,7); Spawn(5,-10,-6); Spawn(5,10,-6);
+                    SpawnEncounter(2,0,6); SpawnEncounter(2,0,0); SpawnEncounter(1,-3,7); SpawnEncounter(5,-10,-6); SpawnEncounter(5,10,-6);
                     yield return new WaitUntil(() => Enemies.Count == 0);
                     Warn(new[]{new Vector3(-3,0,2),new Vector3(3,0,2),new Vector3(-3,0,6),new Vector3(3,0,6),new Vector3(0,0,6),new Vector3(0,3.2f,-2),new Vector3(0,3.2f,3)});
                     DungeonGame.Instance.Sound(.45f);
                     yield return new WaitForSeconds(.65f);
-                    Spawn(0,-3,2); Spawn(0,3,2); Spawn(0,-3,6); Spawn(0,3,6); Spawn(0,0,6); Spawn(4,0,-2,3.2f); Spawn(4,0,3,3.2f); break;
+                    SpawnEncounter(0,-3,2); SpawnEncounter(0,3,2); SpawnEncounter(0,-3,6); SpawnEncounter(0,3,6); SpawnEncounter(0,0,6); SpawnEncounter(4,0,-2,3.2f); SpawnEncounter(4,0,3,3.2f); break;
                 case 6:
-                    Spawn(0,-4,1); Spawn(0,4,-1); Spawn(0,3,7);
-                    Spawn(1,-8,7); Spawn(1,8,7); Spawn(2,0,5); Spawn(4,0,-4,3.5f); Spawn(5,10,7); break;
+                    SpawnEncounter(0,-4,1); SpawnEncounter(0,4,-1); SpawnEncounter(0,3,7);
+                    SpawnEncounter(1,-8,7); SpawnEncounter(1,8,7); SpawnEncounter(2,0,5); SpawnEncounter(4,0,-4,3.5f); SpawnEncounter(5,10,7); break;
                 case 7:
-                    Spawn(0,-3,2); Spawn(0,3,2); Spawn(0,-3,8);
-                    Spawn(1,-7,0,2.4f); Spawn(1,7,0,2.4f); Spawn(2,0,8);
-                    Spawn(4,-2,7,3.8f); Spawn(5,10,7); break;
+                    SpawnEncounter(0,-3,2); SpawnEncounter(0,3,2); SpawnEncounter(0,-3,8);
+                    SpawnEncounter(1,-7,0,2.4f); SpawnEncounter(1,7,0,2.4f); SpawnEncounter(2,0,8);
+                    SpawnEncounter(4,-2,7,3.8f); SpawnEncounter(5,10,7); break;
                 case 10:
-                    Spawn(0,-5,3); Spawn(0,5,3); Spawn(0,0,7);
-                    Spawn(2,-5,8); Spawn(2,5,8); Spawn(4,-5,-6,3.2f); Spawn(4,5,-6,3.2f); Spawn(5,-10,-7); break;
-                case 9: Spawn(3, 0, 6); break;
+                    SpawnEncounter(0,-5,3); SpawnEncounter(0,5,3); SpawnEncounter(0,0,7);
+                    SpawnEncounter(2,-5,8); SpawnEncounter(2,5,8); SpawnEncounter(4,-5,-6,3.2f); SpawnEncounter(4,5,-6,3.2f); SpawnEncounter(5,-10,-7); break;
+                case 9: SpawnEncounter(3, 0, 6); break;
             }
             if(Index==6 || Index==7) { ReinforcementsPending=true; StartCoroutine(Reinforcements()); }
             yield return new WaitUntil(() => Enemies.Count == 0 && !ReinforcementsPending);
@@ -128,16 +128,24 @@ namespace BOIFPS
             yield return new WaitForSeconds(3.5f);
             var spots=Index==6?new[]{new Vector3(-2,0,8),new Vector3(2,0,8),new Vector3(-4,3.4f,0),new Vector3(-10,3.4f,-6)}:new[]{new Vector3(-4,0,-8),new Vector3(4,0,-8),new Vector3(-4,3.6f,-7),new Vector3(4,3.6f,-7)};
             Warn(spots); yield return new WaitForSeconds(.65f);
-            for(int i=0;i<spots.Length;i++) Spawn(i<2?0:Index==6 && i==3?5:4,spots[i].x,spots[i].z,spots[i].y);
+            for(int i=0;i<spots.Length;i++) SpawnEncounter(i<2?0:Index==6 && i==3?5:4,spots[i].x,spots[i].z,spots[i].y);
             ReinforcementsPending=false;
+        }
+        int groundSlots;
+        void SpawnEncounter(int kind, float x, float z, float height=0)
+        {
+            // Rotate through the shuffled bestiary in ordinary ground slots only.
+            if(kind<=2 && groundSlots++ % 3 != 2) kind=DungeonGame.Instance.NextBestiaryKind();
+            Spawn(kind,x,z,height);
         }
         public DungeonEnemy Spawn(int kind, float x, float z, float height=0)
         {
-            if(kind>=4 && height==0) height=3.4f;
+            bool surface=DungeonEnemy.IsSurfaceKind(kind);
+            if(surface && height==0) height=3.4f;
             Vector3 position = transform.position + new Vector3(x, height, z);
-            if(kind<4 && height==0) position=DungeonDanger.GroundBelow(position+Vector3.up*6);
-            if (kind<4 && NavMesh.SamplePosition(position, out var hit, 1.5f, NavMesh.AllAreas)) position = hit.position;
-            var go = new GameObject(kind == 0 ? "Rampant" : kind == 1 ? "Psalmodieur" : kind == 2 ? "Pénitent" : kind==3?"Le Carillonneur":kind==4?"Séraphin":"Tisse-mur");
+            if(!surface && height==0) position=DungeonDanger.GroundBelow(position+Vector3.up*6);
+            if (!surface && NavMesh.SamplePosition(position, out var hit, 1.5f, NavMesh.AllAreas)) position = hit.position;
+            var go = new GameObject(kind >= DungeonEnemy.FirstBestiaryKind ? DungeonEnemy.BestiaryName(kind) : kind == 0 ? "Rampant" : kind == 1 ? "Psalmodieur" : kind == 2 ? "Pénitent" : kind==3?"Le Carillonneur":kind==4?"Séraphin":"Tisse-mur");
             go.transform.position = position;
             var enemy = go.AddComponent<DungeonEnemy>(); enemy.Initialize(kind, this); Enemies.Add(enemy); return enemy;
         }

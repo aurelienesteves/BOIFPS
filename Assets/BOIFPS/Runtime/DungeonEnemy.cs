@@ -4,7 +4,7 @@ using UnityEngine.AI;
 
 namespace BOIFPS
 {
-    public sealed class DungeonEnemy : MonoBehaviour
+    public sealed partial class DungeonEnemy : MonoBehaviour
     {
         public int Kind { get; private set; }
         public float Health { get; private set; }
@@ -23,7 +23,8 @@ namespace BOIFPS
         public bool IsBurning => Time.time<burnUntil;
         public bool PhaseTwo { get; private set; }
         public bool Attacking { get; set; }
-        public bool SurfaceEnemy => Kind>=4;
+        public bool SurfaceEnemy => IsSurfaceKind(Kind);
+        public static bool IsSurfaceKind(int kind) => kind==4 || kind==5;
         public Vector3 AimPoint => SurfaceEnemy?transform.position:transform.position+Vector3.up*(Kind==0?.55f:1.4f);
         public bool AttackAvailable
         {
@@ -39,6 +40,7 @@ namespace BOIFPS
         {
             Kind = kind; Room = room;
             Health = MaxHealth = kind == 0 ? 18 : kind == 1 ? 36 : kind == 2 ? 90 : kind==3?1350:kind==4?30:45;
+            if (IsBestiary) Health = MaxHealth = Profile.Life;
             lane=room.Enemies.Count; lastSeen=DungeonGame.Instance.Player.transform.position;
             if(!SurfaceEnemy)
             {
@@ -46,6 +48,7 @@ namespace BOIFPS
                 agent.speed = kind == 0 ? 9.4f : kind == 1 ? 5.2f : 5.6f; agent.acceleration = 70; agent.angularSpeed = 720; agent.stoppingDistance = kind == 1 ? 1 : .8f;
             }
             baseColor = kind == 0 ? new Color(.62f, .48f, .43f) : kind == 1 ? new Color(.35f, .55f, .65f) : kind==4?new Color(.7f,.44f,.16f):kind==5?new Color(.35f,.65f,.30f):new Color(.42f, .32f, .27f);
+            if (IsBestiary) { baseColor = Profile.Color; agent.speed = Profile.Speed; agent.radius = .45f; }
             var g = DungeonGame.Instance;
             body = g.Cube("Corps", transform.position + Vector3.up * (SurfaceEnemy?0:kind == 0 ? .55f : kind == 3 ? 2 : 1.2f), SurfaceEnemy?new Vector3(.9f,.6f,1.1f):kind == 0 ? new Vector3(1, .7f, 1.5f) : kind == 3 ? new Vector3(2.5f, 4, 2.5f) : new Vector3(kind == 2 ? 1.4f : .7f, 2.2f, .9f), baseColor, transform, PrimitiveType.Capsule).transform;
             skin = body.GetComponent<Renderer>();
@@ -68,6 +71,7 @@ namespace BOIFPS
                 var bell = g.Cube("Cloche", transform.position + Vector3.up * (kind == 3 ? 2 : 1.2f), new Vector3(kind == 3 ? 2.8f : 1.8f, .8f, kind == 3 ? 2.8f : 1.8f), new Color(.55f, .4f, .15f), transform, PrimitiveType.Cylinder);
                 Destroy(bell.GetComponent<Collider>());
             }
+            if(IsBestiary) AddCrest();
             if(SurfaceEnemy) gameObject.AddComponent<DungeonSurfaceEnemy>().Initialize(this);
             else StartCoroutine(Brain());
         }
@@ -111,7 +115,12 @@ namespace BOIFPS
                 Vector3 target = lastSeen;
                 float distance = Vector3.Distance(target, transform.position);
                 agent.isStopped = false;
-                if (Kind == 3)
+                if (IsBestiary)
+                {
+                    if (distance <= Profile.Range && visible && AttackAvailable) yield return BestiaryAttack(target);
+                    else { MoveTo(target); yield return new WaitForSeconds(.15f); }
+                }
+                else if (Kind == 3)
                 {
                     agent.isStopped = true;
                     if (!PhaseTwo && Health <= MaxHealth * .5f) { PhaseTwo = true; yield return Tell(1.1f); }

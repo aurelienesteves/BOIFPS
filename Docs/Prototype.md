@@ -96,6 +96,26 @@ Les trois premières salles de combat ordinaires accueillent successivement 2, 3
 | F | Cloison, deux fosses, balcons et passerelle à 2,8 m | 3 Rampants, 2 Pénitents, 2 Séraphins, 1 Tisse-mur |
 | Boss | Cercle rituel, piliers et deux tribunes à 2,8 m | Carillonneur à 1 350 PV |
 
+À partir du quatrième combat ordinaire, deux emplacements au sol sur trois puisent dans un ordre de 15 espèces mélangé avec la graine du donjon. Le tirage parcourt toute la liste avant de la reprendre. Le nombre de créatures et le calendrier des renforts restent ceux de la salle.
+
+| Espèce | PV | Attaque et parade |
+| --- | ---: | --- |
+| Aiguilleur | 36 | Verrouille une ligne puis tire une aiguille rapide. Décalez-vous pendant le signal orange. |
+| Cisaille | 36 | Deux traits convergent sur la position annoncée. Quittez le point de croisement. |
+| Balayeur d’encens | 45 | Balaie un arc de gauche à droite en cinq tirs. Passez derrière le premier. |
+| Écholâtre | 36 | Un second tir rapide rattrape le premier dans le même axe. Gardez la ligne libre. |
+| Roue votive | 54 | Émet huit rayons simultanés à l’horizontale. Éloignez-vous pour élargir les intervalles. |
+| Vrilleur | 45 | Deux rayons opposés pivotent par crans successifs. Traversez après leur passage. |
+| Fossoyeur bifide | 54 | Marque deux fosses de part et d’autre de votre position. Le milieu reste praticable. |
+| Arpenteur funèbre | 54 | Trois sceaux éclatent successivement sur la ligne qui vous relie. Sortez par le côté. |
+| Guetteur de traces | 36 | Pose un sceau en avant de votre course. Changez de direction. |
+| Bourdon creux | 54 | Annonce une zone circulaire à ses pieds. Sortez du cercle ou sautez à la détonation. |
+| Bélier de suie | 54 | Charge sur six mètres dans un couloir annoncé au sol. Esquivez latéralement. |
+| Veuve des cryptes | 18 | Enchaîne deux coups de griffes et se réoriente avant le second. Un tir du Cloueur suffit. |
+| Sutureur | 36 | Rend 9 PV à un allié blessé dans un rayon de six mètres. Sans patient, il lance un trait lent. |
+| Veilleur du seuil | 45 | Tire si vous restez près du point visé pendant son signal. Un déplacement suffit à annuler le tir. |
+| Fuyard aux braises | 36 | Dépose une braise temporisée à ses pieds et recule. Contournez la marque en le poursuivant. |
+
 Les Rampants approchent à 9,4 m/s. Un sur trois poursuit directement ; les autres cherchent des points latéraux à 4,5–7,5 m du joueur, par un côté gauche ou droit, avant de refermer leur approche. Ils cherchent des chemins praticables autour des obstacles et des fosses. Certains Pénitents visent la trajectoire anticipée du joueur ; les autres poursuivent directement. Les tireurs reculent de près et cherchent des positions décalées pour créer des tirs croisés.
 
 Les annonces et récupérations sont plus courtes : bond des Rampants annoncé pendant 0,25 s, charge des Pénitents pendant 0,62 s et tirs des Psalmodieurs pendant 0,45 à 0,55 s selon le motif. Les tirs se déplacent à 10–18 m/s selon le motif pour les Psalmodieurs et à 14 m/s pour les créatures hors sol. Le groupe vise une limite de quatre attaquants engagés simultanément.

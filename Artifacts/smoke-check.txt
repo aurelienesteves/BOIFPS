@@ -1,23 +1,37 @@
 PASS Initialisation et pause d’accueil
 PASS Navigation complète vers (0.00, 0.00, -21.20)
-PASS Navigation complète vers (0.00, 0.00, -53.20)
-PASS Navigation complète vers (21.20, 0.00, -64.00)
-PASS Navigation complète vers (53.20, 0.00, -64.00)
-PASS Navigation complète vers (64.00, 0.00, -85.20)
-PASS Navigation complète vers (64.00, 0.00, -117.20)
-PASS Navigation complète vers (64.00, 0.00, -149.20)
-PASS Navigation complète vers (85.20, 0.00, -128.00)
-PASS Navigation complète vers (96.00, 0.00, -149.20)
-PASS Navigation complète vers (-21.20, 0.00, -64.00)
-PASS Navigation complète vers (42.80, 0.00, -96.00)
+PASS Navigation complète vers (-21.20, 0.00, -32.00)
+PASS Navigation complète vers (-53.20, 0.00, -32.00)
+PASS Navigation complète vers (-85.20, 0.00, -32.00)
+PASS Navigation complète vers (-96.00, 0.00, -53.20)
+PASS Navigation complète vers (-96.00, 0.00, -85.20)
+PASS Navigation complète vers (-96.00, 0.00, -117.20)
+PASS Navigation complète vers (-117.20, 0.00, -64.00)
+PASS Navigation complète vers (-96.00, 0.00, -10.80)
+PASS Navigation complète vers (-74.80, 0.00, -96.00)
+PASS Espèce distincte, attaque annoncée et terminée : Veilleur du seuil
+PASS Espèce distincte, attaque annoncée et terminée : Roue votive
+PASS Espèce distincte, attaque annoncée et terminée : Fuyard aux braises
+PASS Espèce distincte, attaque annoncée et terminée : Sutureur
+PASS Espèce distincte, attaque annoncée et terminée : Écholâtre
+PASS Espèce distincte, attaque annoncée et terminée : Bélier de suie
+PASS Espèce distincte, attaque annoncée et terminée : Bourdon creux
+PASS Espèce distincte, attaque annoncée et terminée : Arpenteur funèbre
+PASS Espèce distincte, attaque annoncée et terminée : Aiguilleur
+PASS Espèce distincte, attaque annoncée et terminée : Vrilleur
+PASS Espèce distincte, attaque annoncée et terminée : Veuve des cryptes
+PASS Espèce distincte, attaque annoncée et terminée : Cisaille
+PASS Espèce distincte, attaque annoncée et terminée : Guetteur de traces
+PASS Espèce distincte, attaque annoncée et terminée : Fossoyeur bifide
+PASS Espèce distincte, attaque annoncée et terminée : Balayeur d’encens
 PASS Ouverture avec ennemis à un ou deux tirs
-PASS Composition salle 12
-PASS Portes verrouillées salle 12
+PASS Composition salle 3
+PASS Portes verrouillées salle 3
 PASS Agent sur NavMesh Rampant
-PASS Ennemi peut rejoindre l’entrée de la salle 12
+PASS Ennemi peut rejoindre l’entrée de la salle 3
 PASS Agent sur NavMesh Psalmodieur
-PASS Ennemi peut rejoindre l’entrée de la salle 12
-PASS Fin du combat et portes ouvertes salle 12
+PASS Ennemi peut rejoindre l’entrée de la salle 3
+PASS Fin du combat et portes ouvertes salle 3
 PASS Quatre armes et navigation du catalogue en pause
 PASS Dernière page de l’arsenal accessible
 PASS Adjectif forgé avant la relique
@@ -33,71 +47,65 @@ PASS Agent sur NavMesh Rampant
 PASS Ennemi peut rejoindre l’entrée de la salle 10
 PASS Fin du combat et portes ouvertes salle 10
 PASS Ouverture avec ennemis à un ou deux tirs
-PASS Composition salle 7
-PASS Portes verrouillées salle 7
-PASS Agent sur NavMesh Rampant
-PASS Ennemi peut rejoindre l’entrée de la salle 7
-PASS Agent sur NavMesh Psalmodieur
-PASS Ennemi peut rejoindre l’entrée de la salle 7
-PASS Agent sur NavMesh Rampant
-PASS Ennemi peut rejoindre l’entrée de la salle 7
-PASS Agent sur NavMesh Rampant
-PASS Ennemi peut rejoindre l’entrée de la salle 7
-PASS Fin du combat et portes ouvertes salle 7
-PASS Composition salle 2
-PASS Portes verrouillées salle 2
-PASS Agent sur NavMesh Psalmodieur
-PASS Ennemi peut rejoindre l’entrée de la salle 2
-PASS Agent sur NavMesh Psalmodieur
-PASS Ennemi peut rejoindre l’entrée de la salle 2
-PASS Agent sur NavMesh Rampant
-PASS Ennemi peut rejoindre l’entrée de la salle 2
-PASS Agent sur NavMesh Rampant
-PASS Ennemi peut rejoindre l’entrée de la salle 2
-PASS Ennemi hors sol actif : Séraphin
-PASS Ennemi hors sol actif : Séraphin
-PASS Fin du combat et portes ouvertes salle 2
 PASS Composition salle 12
 PASS Portes verrouillées salle 12
-PASS Agent sur NavMesh Psalmodieur
+PASS Agent sur NavMesh Rampant
 PASS Ennemi peut rejoindre l’entrée de la salle 12
 PASS Agent sur NavMesh Psalmodieur
+PASS Ennemi peut rejoindre l’entrée de la salle 12
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 12
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 12
+PASS Fin du combat et portes ouvertes salle 12
+PASS Composition salle 7
+PASS Portes verrouillées salle 7
+PASS Agent sur NavMesh Veilleur du seuil
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Agent sur NavMesh Roue votive
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Agent sur NavMesh Rampant
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Agent sur NavMesh Fuyard aux braises
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Agent sur NavMesh Sutureur
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Agent sur NavMesh Pénitent
+PASS Ennemi peut rejoindre l’entrée de la salle 7
+PASS Ennemi hors sol actif : Séraphin
+PASS Ennemi hors sol actif : Tisse-mur
+PASS Tisse-mur attaché à une paroi
+PASS Portes maintenues avant les renforts temporisés
+PASS Quatre renforts arrivent pendant le combat
+PASS Fin du combat et portes ouvertes salle 7
+PASS Composition salle 12
+PASS Portes verrouillées salle 12
+PASS Agent sur NavMesh Bourdon creux
+PASS Ennemi peut rejoindre l’entrée de la salle 12
+PASS Agent sur NavMesh Arpenteur funèbre
 PASS Ennemi peut rejoindre l’entrée de la salle 12
 PASS Ennemi hors sol actif : Séraphin
 PASS Agent sur NavMesh Rampant
 PASS Ennemi peut rejoindre l’entrée de la salle 12
-PASS Agent sur NavMesh Rampant
+PASS Agent sur NavMesh Aiguilleur
 PASS Ennemi peut rejoindre l’entrée de la salle 12
-PASS Agent sur NavMesh Pénitent
+PASS Agent sur NavMesh Vrilleur
 PASS Ennemi peut rejoindre l’entrée de la salle 12
 PASS Fin du combat et portes ouvertes salle 12
 PASS Composition salle 13
 PASS Portes verrouillées salle 13
-PASS Agent sur NavMesh Psalmodieur
+PASS Agent sur NavMesh Veuve des cryptes
 PASS Ennemi peut rejoindre l’entrée de la salle 13
-PASS Agent sur NavMesh Psalmodieur
+PASS Agent sur NavMesh Cisaille
 PASS Ennemi peut rejoindre l’entrée de la salle 13
 PASS Ennemi hors sol actif : Séraphin
 PASS Agent sur NavMesh Rampant
 PASS Ennemi peut rejoindre l’entrée de la salle 13
-PASS Agent sur NavMesh Rampant
+PASS Agent sur NavMesh Guetteur de traces
 PASS Ennemi peut rejoindre l’entrée de la salle 13
-PASS Agent sur NavMesh Pénitent
+PASS Agent sur NavMesh Fossoyeur bifide
 PASS Ennemi peut rejoindre l’entrée de la salle 13
 PASS Fin du combat et portes ouvertes salle 13
-PASS Composition salle 2
-PASS Portes verrouillées salle 2
-PASS Agent sur NavMesh Psalmodieur
-PASS Ennemi peut rejoindre l’entrée de la salle 2
-PASS Agent sur NavMesh Psalmodieur
-PASS Ennemi peut rejoindre l’entrée de la salle 2
-PASS Agent sur NavMesh Rampant
-PASS Ennemi peut rejoindre l’entrée de la salle 2
-PASS Agent sur NavMesh Rampant
-PASS Ennemi peut rejoindre l’entrée de la salle 2
-PASS Ennemi hors sol actif : Séraphin
-PASS Ennemi hors sol actif : Séraphin
-PASS Fin du combat et portes ouvertes salle 2
 PASS Composition salle 9
 PASS Portes verrouillées salle 9
 PASS Agent sur NavMesh Le Carillonneur
