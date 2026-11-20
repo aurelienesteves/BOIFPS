@@ -23,7 +23,8 @@ namespace BOIFPS
             Vector3[] offsets={new Vector3(0,3,7),new Vector3(0,2.6f,6),new Vector3(0,2.6f,0),new Vector3(0,3.2f,8),new Vector3(0,2.4f,2),new Vector3(9.5f,2.8f,2),new Vector3(0,2.8f,8)};
             for(int i=0;i<indices.Length;i++)
             {
-                Vector3 destination=g.Rooms[indices[i]].transform.position+offsets[i];
+                var tile=g.Rooms.Find(room=>room.Index==indices[i]); if(tile==null) continue;
+                Vector3 destination=tile.transform.position+offsets[i];
                 var path=new NavMeshPath();
                 bool sampled=NavMesh.SamplePosition(destination,out var hit,.45f,NavMesh.AllAreas);
                 Check(sampled && Mathf.Abs(hit.position.y-destination.y)<.3f,"Walkable upper level in room "+indices[i]);
@@ -31,7 +32,7 @@ namespace BOIFPS
                 player.Teleport(destination+Vector3.up*.05f);
                 yield return new WaitForSeconds(.15f);
                 Check(Mathf.Abs(player.transform.position.y-destination.y)<.15f,"Player stands on upper level "+indices[i]);
-                var spawned=g.Rooms[indices[i]].Spawn(0,offsets[i].x,offsets[i].z);
+                var spawned=tile.Spawn(0,offsets[i].x,offsets[i].z);
                 spawned.StopAllCoroutines();
                 Check(spawned.GetComponent<NavMeshAgent>().isOnNavMesh && Mathf.Abs(spawned.transform.position.y-destination.y)<.3f,"Enemy spawns on the correct level "+indices[i]);
                 spawned.Damage(10000,false,Vector3.zero,false); yield return null;
@@ -41,14 +42,15 @@ namespace BOIFPS
             float[] lengths={8.5f,5,8,13.5f,8}; float[] heights={3,2.6f,3.2f,2.8f,2.8f};
             for(int i=0;i<rampRooms.Length;i++)
             {
-                player.Teleport(g.Rooms[rampRooms[i]].transform.position+starts[i]);
+                var tile=g.Rooms.Find(room=>room.Index==rampRooms[i]); if(tile==null) continue;
+                player.Teleport(tile.transform.position+starts[i]);
                 float end=Time.time+(lengths[i]+.6f)/8;
                 while(Time.time<end) { player.GetComponent<CharacterController>().Move(Vector3.forward*8*Time.deltaTime); yield return null; }
                 yield return new WaitForSeconds(.2f);
                 Check(Physics.Raycast(player.transform.position+Vector3.up*.05f,Vector3.down,.25f) && Mathf.Abs(player.transform.position.y-heights[i])<.15f,"Player physically climbs new ramp "+rampRooms[i]+" (y="+player.transform.position.y+")");
             }
             // Damage must resolve on the targeted floor, and jumping must evade it.
-            Vector3 balcony=g.Rooms[3].transform.position+new Vector3(0,2.6f,0);
+            Vector3 balcony=g.Rooms.Find(room=>room.Index==12).transform.position+new Vector3(0,g.Rooms.Find(room=>room.Index==12).Height,3);
             player.Teleport(balcony+Vector3.up*.03f); player.Health=100;
             DungeonDanger.Spawn(balcony,1.8f,.15f,18); yield return new WaitForSeconds(.25f);
             Check(player.Health==82,"Burial damages the player on the upper floor");

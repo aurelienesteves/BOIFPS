@@ -49,3 +49,5 @@ PASS Scatter + pendulum + mirror produce five empowered returning pellets
 PASS Combined pellets retain fire propagation
 PASS Pause freezes the transformed build
 PASS Cleanup removes transformed projectiles
+PASS Five remaining cartridges deal 25 reload damage
+PASS Second jump gains height in midair

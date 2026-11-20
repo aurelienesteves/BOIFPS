@@ -14,7 +14,7 @@ namespace BOIFPS
         Transform weapon;
         float kick;
         float verticalSpeed, groundedUntil, jumpBufferedUntil = -1, recoil, trauma, muzzleUntil;
-        bool wasGrounded;
+        bool wasGrounded, airJumpUsed;
         Transform muzzleFlash;
         Light muzzleLight;
         public bool Grounded => controller.isGrounded;
@@ -73,7 +73,7 @@ namespace BOIFPS
             {
                 if((g.Current==null || transform.position.y>1.5f || !g.Current.ContainsPit(transform.position,.6f)) && transform.position.y>=0)
                     lastSafe=transform.position;
-                groundedUntil = Time.time + .1f;
+                groundedUntil = Time.time + .1f; airJumpUsed=false;
                 if (!wasGrounded && verticalSpeed < -5) { trauma = Mathf.Max(trauma, .045f); g.Sound(.65f); }
                 if (verticalSpeed < 0) verticalSpeed = -2;
             }
@@ -146,6 +146,14 @@ namespace BOIFPS
         {
             var g=DungeonGame.Instance;
             if(g.Paused || g.Finished || Reloading || Ammo==MagazineCapacity) return;
+            if(Has(13) && Ammo>0)
+            {
+                var origin=transform.position+Vector3.up;
+                foreach(var enemy in DungeonRelics.Targets())
+                    if(Vector3.Distance(origin,enemy.AimPoint)<=5 && DungeonRelics.ClearPath(origin,enemy.AimPoint))
+                        enemy.Damage(Ammo*5,false,enemy.AimPoint-origin,false);
+                DungeonRelics.Notify(13,"Souffle de cendre",origin);
+            }
             if(Has(8)) DungeonRelics.Notify(8,"Champ actif • tirs hostiles à 25 %",transform.position+Vector3.up*.1f);
             reloadWasEmpty=Ammo==0; Reloading=true; reloadEnds=Time.time+ReloadDuration; g.Sound(.75f);
         }
@@ -174,7 +182,15 @@ namespace BOIFPS
             protectedUntil=Time.time+.75f; trauma=.1f; g.Hud.Hit(transform.position); g.ImpactSound(false);
             if(Health<=0) g.End(false);
         }
-        public void Jump() { jumpBufferedUntil=Time.time+.12f; }
+        public void Jump()
+        {
+            if(Has(12) && !Grounded && Time.time>groundedUntil && !airJumpUsed)
+            {
+                airJumpUsed=true; verticalSpeed=JumpSpeed; jumpBufferedUntil=-1;
+                DungeonRelics.Notify(12,"Second bond",transform.position); return;
+            }
+            jumpBufferedUntil=Time.time+.12f;
+        }
         void Fire(float angle,float coefficient,bool empowered,float elevation=0)
         {
             Vector3 direction=Quaternion.AngleAxis(angle,View.transform.up)*Quaternion.AngleAxis(elevation,View.transform.right)*View.transform.forward;

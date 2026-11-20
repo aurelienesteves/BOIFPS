@@ -9,6 +9,7 @@ namespace BOIFPS
     public sealed class DungeonRoom : MonoBehaviour
     {
         public int Index;
+        public float Height, GallerySpan, GalleryDepth;
         public bool Entered, Cleared, Active;
         public readonly List<GameObject> Gates = new List<GameObject>();
         public readonly List<DungeonEnemy> Enemies = new List<DungeonEnemy>();
@@ -20,7 +21,7 @@ namespace BOIFPS
             foreach(var pit in Pits) if(p.x>pit.xMin-margin && p.x<pit.xMax+margin && p.z>pit.yMin-margin && p.z<pit.yMax+margin) return true;
             return false;
         }
-        public bool IsCombat => Index == 1 || Index == 2 || Index == 3 || Index == 6 || Index == 7 || Index == 9 || Index == 10;
+        public bool IsCombat => Index == 1 || Index == 2 || Index == 3 || Index == 6 || Index == 7 || Index == 9 || Index == 10 || Index==12 || Index==13;
         public void Prepare()
         {
             if (Index == 0 || Index == 4 || Index == 11) Pickup(false, transform.position+(Index==0?Vector3.forward*3:Vector3.zero), this);
@@ -44,12 +45,15 @@ namespace BOIFPS
         IEnumerator Encounter()
         {
             Active = true;
-            DungeonGame.Instance.Player.SetCheckpoint(DungeonDanger.GroundBelow(transform.position+(Index==10?Vector3.left*9:Vector3.back*8)+Vector3.up*6));
+            DungeonGame.Instance.Player.SetCheckpoint(DungeonGame.Instance.Player.transform.position);
             foreach (var gate in Gates) gate.SetActive(true);
             DungeonGame.Instance.Sound(.7f);
             yield return new WaitForSeconds(.6f);
             switch (Index)
             {
+                case 12: case 13:
+                    Spawn(1,-GallerySpan,Index==12?3:-3,Height); Spawn(1,GallerySpan,3,Height);
+                    Spawn(4,0,0,Height+1); Spawn(0,-2,-5); Spawn(0,2,7); Spawn(2,0,7); break;
                 case 1:
                     Spawn(0,-3,3); Spawn(0,3,3); Spawn(0,-3,7); Spawn(0,3,7); Spawn(0,0,8); Spawn(0,-2,0); Spawn(0,2,0); break;
                 case 2:

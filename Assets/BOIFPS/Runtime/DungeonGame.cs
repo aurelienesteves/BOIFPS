@@ -16,15 +16,18 @@ namespace BOIFPS
         public readonly List<DungeonRoom> Rooms = new List<DungeonRoom>();
         public readonly HashSet<int> Upgrades = new HashSet<int>();
         public bool Paused, Finished;
-        public int Cleared;
+        public int Cleared, CombatTotal;
+        [SerializeField] int dungeonSeed;
+        public int Seed { get; private set; }
+        public readonly List<int> Parents = new List<int>();
         public float Elapsed;
         public float Sensitivity = .10f, FieldOfView = 95;
         public bool CameraMotion = true;
         public bool Azerty = true;
         public DungeonRoom Current;
         [SerializeField] Shader dungeonShader;
-        public static readonly string[] ItemNames = { "Nerf à vif", "Dent creuse", "Os bifide", "Moelle brûlante", "Vertèbre percée", "Tendon noir", "Chœur des morts", "Pendule d’os", "Sablier affamé", "Épine du vide", "Paupière miroir", "Satellite d’os" };
-        public static readonly string[] ItemDescriptions = { "+25 % de cadence", "+30 % de dégâts directs", "Gerbe de 5 pointes : forte de près, portée 10 m, tir plus lent", "Feu : 6 dégâts/s, 4 s ; une victime embrasée propage 14 dégâts + feu à 4 m", "Traverse un ennemi supplémentaire", "Recharge du dash réduite de 25 %", "Vos victimes libèrent 3 esprits traqueurs", "Toutes les pointes traversent et reviennent : déplacez-vous pour aligner le retour", "Recharger ralentit les tirs hostiles proches", "Le dash sème 3 mines à retardement", "Dash : capture un tir pendant 0,55 s ; prochaine attaque ×2,5 et pénétrante", "Une recharge à vide crée 2 os en orbite" };
+        public static readonly string[] ItemNames = { "Nerf à vif", "Dent creuse", "Os bifide", "Moelle brûlante", "Vertèbre percée", "Tendon noir", "Chœur des morts", "Pendule d’os", "Sablier affamé", "Épine du vide", "Paupière miroir", "Satellite d’os", "Plume du clocher", "Poumon de cendre" };
+        public static readonly string[] ItemDescriptions = { "+25 % de cadence", "+30 % de dégâts directs", "Gerbe de 5 pointes : forte de près, portée 10 m, tir plus lent", "Feu : 6 dégâts/s, 4 s ; une victime embrasée propage 14 dégâts + feu à 4 m", "Traverse un ennemi supplémentaire", "Recharge du dash réduite de 25 %", "Vos victimes libèrent 3 esprits traqueurs", "Toutes les pointes traversent et reviennent : déplacez-vous pour aligner le retour", "Recharger ralentit les tirs hostiles proches", "Le dash sème 3 mines à retardement", "Dash : capture un tir pendant 0,55 s ; prochaine attaque ×2,5 et pénétrante", "Une recharge à vide crée 2 os en orbite", "Appuyez de nouveau sur saut en vol pour bondir une seconde fois", "Recharge anticipée : chaque cartouche restante inflige 5 dégâts aux ennemis visibles à 5 m" };
         Transform geometry;
         readonly List<Material> materials = new List<Material>();
         readonly Dictionary<Color, Material> emissiveMaterials = new Dictionary<Color, Material>();
@@ -41,16 +44,7 @@ namespace BOIFPS
             RenderSettings.fog = true; RenderSettings.fogColor = new Color(.025f, .035f, .04f);
             RenderSettings.fogMode = FogMode.ExponentialSquared; RenderSettings.fogDensity = .018f;
             geometry = new GameObject("Architecture").transform; geometry.SetParent(transform);
-            string[] names = { "Entrée", "A — Les griffes", "B — Le chœur", "C — La pénitence", "Reliquaire I", "Carrefour", "D — La communion", "E — Les fosses", "Antichambre", "Le Carillonneur", "F — Le sacrifice", "Reliquaire II" };
-            for (int i = 0; i < 12; i++)
-            {
-                Vector3 center = i < 10 ? new Vector3(0, 0, i * 32) : new Vector3((i - 9) * 32, 0, 160);
-                var room = new GameObject(names[i]).AddComponent<DungeonRoom>();
-                room.transform.SetParent(transform); room.transform.position = center; room.Index = i; Rooms.Add(room);
-                BuildRoom(room, i > 0 && i < 10, i < 9, i == 5 || i == 10, i >= 10);
-            }
-            for (int i = 0; i < 9; i++) Corridor(new Vector3(0, 0, i * 32 + 16), false);
-            Corridor(new Vector3(16, 0, 160), true); Corridor(new Vector3(48, 0, 160), true);
+            GenerateDungeon();
             Physics.SyncTransforms();
             var surface = geometry.gameObject.AddComponent<NavMeshSurface>();
             surface.collectObjects = CollectObjects.Children;
@@ -72,6 +66,58 @@ namespace BOIFPS
             Hud.ShowIntro();
         }
 
+        void GenerateDungeon()
+        {
+            Seed = dungeonSeed == 0 ? System.Guid.NewGuid().GetHashCode() : dungeonSeed;
+            var random = new System.Random(Seed);
+            var directions = new[] { Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left };
+            // Grow a winding main route along two perpendicular axes so it cannot trap itself.
+            int heading = random.Next(4);
+            int side = (heading + (random.Next(2)==0 ? 1 : 3)) % 4;
+            var cells = new List<Vector2Int> { Vector2Int.zero };
+            var roles = new List<int> { 0 };
+            var encounters = new List<int> { 1,2,3,6,7,10,12,13 };
+            for(int i=encounters.Count-1;i>0;i--)
+            {
+                int j=random.Next(i+1); int temp=encounters[i]; encounters[i]=encounters[j]; encounters[j]=temp;
+            }
+            int length=random.Next(7,10);
+            Parents.Add(-1);
+            for(int i=1;i<=length;i++)
+            {
+                cells.Add(cells[i-1]+directions[random.Next(2)==0?heading:side]);
+                Parents.Add(i-1);
+                roles.Add(i==length?9:i==length-1?8:i==3?4:encounters[(i-1)%encounters.Count]);
+            }
+            int branches=random.Next(3,6);
+            for(int i=0;i<branches;i++)
+            {
+                var options=new List<(int parent,Vector2Int cell)>();
+                for(int j=1;j<cells.Count;j++)
+                {
+                    if(roles[j]==9 || roles[j]==11) continue;
+                    foreach(var d in directions)
+                        if(!cells.Contains(cells[j]+d)) options.Add((j,cells[j]+d));
+                }
+                var option=options[random.Next(options.Count)];
+                Parents.Add(option.parent); cells.Add(option.cell);
+                roles.Add(i==branches-1?11:i==0?12:i==1?13:encounters[random.Next(encounters.Count)]);
+            }
+            string[] names={"Entrée","Nef des griffes","Chœur","Crypte","Reliquaire","Carrefour","Communion","Fosses","Antichambre","Le Carillonneur","Sacrifice","Reliquaire secret","Cloître suspendu","Escaliers du beffroi"};
+            for(int i=0;i<cells.Count;i++)
+            {
+                var room=new GameObject(names[roles[i]]).AddComponent<DungeonRoom>();
+                room.Index=roles[i]; room.Height=random.Next(27,36)*.1f; room.GallerySpan=random.Next(5,8); room.GalleryDepth=random.Next(5,8);
+                room.transform.SetParent(transform); room.transform.position=new Vector3(cells[i].x*32,0,cells[i].y*32);
+                Rooms.Add(room); if(room.IsCombat) CombatTotal++;
+                var doors=new HashSet<Vector2Int>();
+                for(int j=1;j<cells.Count;j++)
+                    if(Parents[j]==i) doors.Add(cells[j]-cells[i]);
+                    else if(j==i) doors.Add(cells[Parents[j]]-cells[i]);
+                BuildRoom(room,doors.Contains(Vector2Int.down),doors.Contains(Vector2Int.up),doors.Contains(Vector2Int.right),doors.Contains(Vector2Int.left));
+                if(i>0) Corridor((room.transform.position+Rooms[Parents[i]].transform.position)*.5f,cells[i].x!=cells[Parents[i]].x);
+            }
+        }
         void BuildRoom(DungeonRoom room, bool south, bool north, bool east, bool west)
         {
             Vector3 c = room.transform.position;
@@ -101,6 +147,7 @@ namespace BOIFPS
         }
         void BuildFloor(DungeonRoom room,Color color)
         {
+            if(room.Index==12) room.Pits.Add(new Rect(-2,1,4,4));
             if(room.Index==6) { room.Pits.Add(new Rect(-7,3,4,4)); room.Pits.Add(new Rect(3,-7,4,4)); }
             if(room.Index==7) { room.Pits.Add(new Rect(-2,-6,4,4)); room.Pits.Add(new Rect(-2,0,4,4)); }
             if(room.Index==10) { room.Pits.Add(new Rect(-7.5f,-2,3,4)); room.Pits.Add(new Rect(4.5f,-2,3,4)); }
@@ -140,6 +187,22 @@ namespace BOIFPS
             Vector3 c = room.transform.position;
             switch (room.Index)
             {
+                case 12: case 13:
+                    float height=room.Height;
+                    float span=room.GallerySpan; float depth=room.GalleryDepth;
+                    foreach(int sign in new[]{-1,1})
+                    {
+                        float z=room.Index==12?3:sign*3;
+                        Platform(c,new Vector3(sign*span,height,z),new Vector2(4,depth),"Palier du cloître");
+                        Ramp(c+new Vector3(sign*span,0,z-8.4f),c+new Vector3(sign*span,height,z-depth*.5f),3);
+                    }
+                    if(room.Index==12) Platform(c,new Vector3(0,height,3),new Vector2(span*2,3),"Pont suspendu");
+                    else
+                    {
+                        Platform(c,new Vector3(0,height,-3),new Vector2(span*2,3),"Coursive basse");
+                        Platform(c,new Vector3(span-1,height,0),new Vector2(3,7),"Coursive en retour");
+                    }
+                    break;
                 case 1: // A long central nave with low cover that the player can vault.
                     Cover(c,-6,0,3,1.1f,10); Cover(c,6,0,3,1.1f,10);
                     Platform(c,new Vector3(0,3,7),new Vector2(21,3),"Balcon de la nef");

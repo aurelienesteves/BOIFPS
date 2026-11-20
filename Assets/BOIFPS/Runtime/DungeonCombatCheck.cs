@@ -45,8 +45,8 @@ namespace BOIFPS
             Check(FindObjectsByType<DungeonFeedback>().Length>0,"Des fragments accompagnent impacts et mort");
             yield return new WaitForSeconds(.85f);
             Check(FindObjectsByType<DungeonFeedback>().Length==0,"Les fragments se nettoient après leur durée de vie");
-            // Leap onto the first arena's low sarcophagus, outside its combat trigger.
-            g.Player.Teleport(new Vector3(6,.1f,25.6f));
+            g.Cube("Tombeau de contrôle",new Vector3(6,.55f,0),new Vector3(3,1.1f,10),Color.gray);
+            g.Player.Teleport(new Vector3(6,.1f,-6.4f));
             yield return new WaitForSeconds(.2f);
             g.Player.Jump(); yield return new WaitForSeconds(.25f);
             g.Player.GetComponent<CharacterController>().Move(Vector3.forward*3);

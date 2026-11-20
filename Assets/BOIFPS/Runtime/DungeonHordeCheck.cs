@@ -27,12 +27,14 @@ namespace BOIFPS
             var g=DungeonGame.Instance; var p=g.Player; g.Hud.ShowPause(false); g.SetPaused(false);
             foreach(int index in new[]{6,7,10})
             {
-                Check(g.Rooms[index].Pits.Count==2,"Deux fosses physiques dans la salle "+index);
-                var pit=g.Rooms[index].Pits[0]; Vector3 center=g.Rooms[index].transform.position+new Vector3(pit.center.x,1,pit.center.y);
+                var arena=g.Rooms.Find(room=>room.Index==index); if(arena==null) continue;
+                Check(arena.Pits.Count==2,"Deux fosses physiques dans la salle "+index);
+                var pit=arena.Pits[0]; Vector3 center=arena.transform.position+new Vector3(pit.center.x,1,pit.center.y);
                 Check(!Physics.Raycast(center,Vector3.down,3,~0,QueryTriggerInteraction.Ignore),"Le centre de la fosse est dépourvu de sol : "+index);
             }
-            p.SetCheckpoint(g.Rooms[6].transform.position+Vector3.back*8);
-            p.Teleport(g.Rooms[6].transform.position+new Vector3(5,.1f,-5));
+            var pitRoom=g.Rooms.Find(room=>room.Index==12); pitRoom.Entered=true;
+            p.SetCheckpoint(pitRoom.transform.position+Vector3.back*8);
+            p.Teleport(pitRoom.transform.position+new Vector3(0,.1f,3));
             yield return new WaitForSeconds(.7f);
             Check(p.Health==80 && p.transform.position.y>-.1f,"Une chute retire 20 PV et replace le joueur sur un point sûr");
             p.Heal(100); p.Teleport(new Vector3(0,.1f,-5));
@@ -42,7 +44,7 @@ namespace BOIFPS
             Check(direct.transform.position.z<right.transform.position.z,"Le poursuivant direct atteint le joueur avant les contourneurs");
             ClearEnemies(); yield return null;
             // Stop the remote encounter started by the fall test.
-            g.Rooms[6].StopAllCoroutines();
+            pitRoom.StopAllCoroutines();
             g.Upgrades.Add(6); var victim=Dummy(0,0,4); var target=Dummy(2,0,7); float before=target.Health;
             victim.Damage(10000,false);
             Check(FindObjectsByType<DungeonProjectile>().Length==3,"Chœur des morts libère trois esprits");

@@ -2,7 +2,7 @@
 
 Ouvrir `Assets/BOIFPS/Scenes/FirstDungeon.unity` dans Unity puis lancer **Play**. Le bouton **Entrer dans les fosses** démarre la partie. Le menu **BOIFPS > Créer ou ouvrir le donjon** permet également d’ouvrir cette scène.
 
-La scène construit son architecture au lancement et calcule sa navigation avant de créer le joueur. Les murs, personnages et sons sont des éléments de prototype. Le parcours est fixe pour permettre de comparer les essais.
+La scène construit son architecture au lancement et calcule sa navigation avant de créer le joueur. Les murs, personnages et sons sont des éléments de prototype. La graine du plan est affichée en pause.
 
 ## Commandes
 
@@ -28,7 +28,7 @@ Les tirs déclenchent une détonation dédiée, un éclair lumineux, le recul de
 
 ## Parcours jouable
 
-Un reliquaire dans l’entrée permet de choisir un premier objet avant les combats. Suivre ensuite les portes vers les trois rencontres d’introduction et un autre reliquaire. Au carrefour, la branche à droite mène au combat facultatif F puis au dernier reliquaire. Revenir au carrefour pour continuer vers D, E, le soin de l’antichambre et le boss. Le premier choix propose trois transformations distinctes parmi Os bifide, Moelle brûlante, Pendule d’os et Paupière miroir. Les choix suivants proposent au moins une transformation non acquise tant qu’il en reste.
+Le plan comprend 11 à 15 salles. Une route principale relie l’entrée, un reliquaire, l’antichambre et le boss. Des branches peuvent se ramifier à leur tour et un second reliquaire récompense l’exploration. Les portes et la carte suivent les connexions générées. Chaque arène se verrouille à l’entrée. Le nombre total de combats dépend du plan. Dans l’inspecteur de DungeonGame, une graine différente de zéro reproduit le plan et ses dimensions. Zéro tire une graine à chaque nouvelle partie. Les offres et les soins utilisent leur propre tirage.
 
 Une salle ferme ses portes lorsque le joueur pénètre suffisamment à l’intérieur. Dans C, une seconde vague annoncée au sol arrive après la mort du premier groupe. Le Carillonneur change de rythme sous la moitié de ses PV. La victoire intervient à sa mort ; la défaite à zéro PV. Une nouvelle descente remet à zéro la santé, les salles et les reliques.
 
@@ -122,7 +122,7 @@ Sur une partie neuve séparée, `DungeonExpansionCheck` vérifie les six cartouc
 
 Le prototype couvre le parcours complet et ses systèmes principaux. Il utilise des formes simples, des couleurs et des impulsions sonores synthétiques. La durée réelle des parties, les performances sur une machine de référence, la direction artistique définitive et le confort du combat doivent encore être évalués en jouant.
 
-Le parcours et les compositions sont déterministes ; les choix de reliques et certains soins varient. La sortie finale est représentée par le bilan de victoire. Il n’y a pas de sauvegarde de partie, de progression permanente ni de génération procédurale des connexions.
+La graine fixe le parcours et les types de rencontres. La sortie finale est représentée par le bilan de victoire. La progression dure le temps de la partie.
 
 ## Verticalité, attaques et retours des reliques — 17 novembre 2026
 

@@ -1,6 +1,6 @@
 # BOIFPS — Les Fosses de la Communion
 
-Prototype solo de roguelite d’horreur en vue subjective : un donjon de sept arènes, cinq types d’ennemis ordinaires, un boss et douze reliques combinables.
+Prototype solo de roguelite d’horreur en vue subjective : un donjon procédural de 11 à 15 salles, cinq types d’ennemis ordinaires, un boss et quatorze reliques combinables.
 
 ## Lancer le jeu
 
@@ -10,14 +10,14 @@ Prototype solo de roguelite d’horreur en vue subjective : un donjon de sept ar
 
 ZQSD/WASD : déplacement ; souris : viser/tirer ; Espace : saut ; Maj : dash ; R : recharge ; E : reliquaire ; Échap : pause. Le clavier peut être changé dans le menu.
 
-Le premier reliquaire propose trois styles parmi la gerbe à courte portée, les pointes revenantes, le feu qui se propage et la capture de projectiles pour préparer une riposte. Les reliques suivantes peuvent combiner leurs effets. Les arènes comportent des galeries, des rampes, des passerelles et des fosses.
+Le premier reliquaire propose trois styles parmi la gerbe à courte portée, les pointes revenantes, le feu qui se propage et la capture de projectiles pour préparer une riposte. Les reliques suivantes peuvent combiner leurs effets. Le plan, les embranchements et la répartition des arènes sont tirés à chaque descente. Le Cloître suspendu et les Escaliers du beffroi ont des galeries de hauteur, d’écartement et de profondeur variables. La Plume du clocher donne un second saut et le Poumon de cendre transforme les cartouches restantes en dégâts de proximité lors d’une recharge anticipée. La graine du plan figure en pause et peut être rejouée en renseignant Dungeon Seed sur DungeonGame dans l’inspecteur avant Play.
 
 ## Documentation et vérification
 
 - [Prototype, règles et commandes](Docs/Prototype.md)
 - [Conception initiale](Docs/Conception.md)
-- [Contrôles des transformations](Artifacts/build-check.txt) : 51 réussis.
-- [Contrôles du parcours complet](Artifacts/smoke-check.txt) : 146 réussis.
+- [Contrôles des transformations](Artifacts/build-check.txt).
+- [Contrôles du parcours complet](Artifacts/smoke-check.txt).
 - [Contrôles de verticalité](Artifacts/depth-check.txt).
 
 Les vérifications automatiques ont été exécutées dans une copie séparée du projet en batch sans rendu. Le ressenti et l’équilibrage restent à apprécier en Play. Les scripts de contrôle se trouvent dans `Assets/BOIFPS/Runtime` et les points d’entrée batch dans `Assets/BOIFPS/Editor/DungeonVerification.cs`.

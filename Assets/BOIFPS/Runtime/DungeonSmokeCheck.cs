@@ -20,19 +20,24 @@ namespace BOIFPS
         IEnumerator Start()
         {
             var g = DungeonGame.Instance;
-            Check(g.Rooms.Count == 12 && g.Paused && g.Player.Health == 100, "Initialisation et pause d’accueil");
-            foreach (var destination in new[] { new Vector3(0, 0, 288), new Vector3(64, 0, 160) })
+            Check(g.Rooms.Count >= 11 && g.Rooms.Count <= 15 && g.Paused && g.Player.Health == 100, "Initialisation et pause d’accueil");
+            for(int i=1;i<g.Rooms.Count;i++)
             {
+                var tile=g.Rooms[i];
+                Vector3 towardParent=(g.Rooms[g.Parents[i]].transform.position-tile.transform.position).normalized;
+                Vector3 destination=tile.transform.position+towardParent*10.8f;
                 var path = new NavMeshPath();
                 Check(NavMesh.CalculatePath(Vector3.zero, destination, NavMesh.AllAreas, path) && path.status == NavMeshPathStatus.PathComplete, "Navigation complète vers " + destination);
             }
             g.Hud.ShowPause(false); g.SetPaused(false); g.Player.enabled = false;
-            foreach (int index in new[] { 1, 2, 3, 6, 7, 10, 9 })
+            var encounters=g.Rooms.FindAll(tile=>tile.IsCombat && tile.Index!=9);
+            encounters.Add(g.Rooms.Find(tile=>tile.Index==9));
+            foreach(var room in encounters)
             {
-                var room = g.Rooms[index];
+                int index=room.Index;
                 g.Player.Teleport(DungeonDanger.GroundBelow(room.transform.position+Vector3.back*7+Vector3.up*6)+Vector3.up*.1f);
                 yield return new WaitForSeconds(1.4f);
-                int expected = index == 1 ? 7 : index==2?9:index == 3 ? 5 : index == 6 ? 12 : index == 7 ? 14 : index==10?11:1;
+                int expected = index == 1 ? 7 : index==2?9:index == 3 ? 5 : index == 6 ? 12 : index == 7 ? 14 : index==10?11:index>=12?6:1;
                 Check(room.Active && room.Enemies.Count == expected, "Composition salle " + index);
                 Check(room.Gates.TrueForAll(gate => gate.activeSelf), "Portes verrouillées salle " + index);
                 foreach (var e in room.Enemies)
@@ -92,7 +97,7 @@ namespace BOIFPS
                     Check(g.Upgrades.Count == 1 && !g.Paused, "Acquisition d’une seule relique et reprise");
                 }
             }
-            Check(g.Finished && g.Paused && g.Cleared == 7, "Victoire et bilan final");
+            Check(g.Finished && g.Paused && g.Cleared == g.CombatTotal, "Victoire et bilan final");
             yield return null;
             Check(FindObjectsByType<DungeonProjectile>().Length == 0 && FindObjectsByType<DungeonDanger>().Length == 0, "Nettoyage des dangers");
             System.IO.Directory.CreateDirectory("Artifacts");

@@ -38,14 +38,15 @@ namespace BOIFPS
             g.Upgrades.Add(2); player.Shoot();
             Check(player.Ammo==5 && FindObjectsByType<DungeonProjectile>().Length==5,"Os bifide produit cinq pointes pour une seule cartouche");
             g.Upgrades.Clear(); g.CleanupHazards();
-            foreach(var destination in new[]{new Vector3(-7,2.6f,70),new Vector3(-7,2.4f,224),new Vector3(7,2.4f,224)})
+            var gallery=g.Rooms.Find(room=>room.Index==12);
+            foreach(var destination in new[]{gallery.transform.position+new Vector3(-gallery.GallerySpan,gallery.Height,3),gallery.transform.position+new Vector3(gallery.GallerySpan,gallery.Height,3)})
             {
                 var path=new NavMeshPath();
                 bool valid=NavMesh.CalculatePath(Vector3.zero,destination,NavMesh.AllAreas,path);
                 Check(valid && path.status==NavMeshPathStatus.PathComplete,"Navigation vers une galerie : "+destination);
                 Check(System.Array.Exists(path.corners,p=>p.y>2),"Le chemin monte réellement à l’étage");
             }
-            player.Teleport(new Vector3(-7,.1f,58.5f));
+            player.Teleport(gallery.transform.position+new Vector3(-gallery.GallerySpan,.1f,-5.4f));
             float until=Time.time+1.4f;
             while(Time.time<until)
             {
@@ -72,7 +73,7 @@ namespace BOIFPS
             flyer.Damage(10000,false); crawler.Damage(10000,false);
             yield return null;
             Check(g.Rooms[0].Enemies.Count==0,"Les deux nouveaux ennemis quittent la liste de combat à leur mort");
-            var underBridge=g.Rooms[7].Spawn(4,-7,0,1.3f);
+            var underBridge=gallery.Spawn(4,-gallery.GallerySpan,3,1.3f);
             yield return new WaitForSeconds(5);
             Check(underBridge.transform.position.y>2.1f,"Un Séraphin sous une tribune peut glisser vers une sortie et remonter");
             underBridge.Damage(10000,false);

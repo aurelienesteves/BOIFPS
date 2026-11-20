@@ -90,6 +90,13 @@ namespace BOIFPS
             Check(target.Health==frozen,"Pause freezes the transformed build"); g.SetPaused(false);
             yield return Reset();
             Check(DungeonProjectile.Active.Count==0,"Cleanup removes transformed projectiles");
+            g.Upgrades.Add(13); target=Dummy(2,3,-5);
+            p.Shoot(); before=target.Health; p.Reload();
+            Check(before-target.Health==25,"Five remaining cartridges deal 25 reload damage");
+            yield return Reset(); g.Upgrades.Add(12);
+            p.Jump(); yield return new WaitForSeconds(.25f); float altitude=p.transform.position.y;
+            p.Jump(); yield return new WaitForSeconds(.3f);
+            Check(p.transform.position.y>altitude+1,"Second jump gains height in midair");
             System.IO.Directory.CreateDirectory("Artifacts"); System.IO.File.WriteAllLines("Artifacts/build-check.txt",results);
             Debug.Log("BOIFPS BUILDS "+(failed?"FAILED":"PASSED")+" — "+results.Count+" checks");
             if(Application.isBatchMode) UnityEditor.EditorApplication.Exit(failed?1:0);

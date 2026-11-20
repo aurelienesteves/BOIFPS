@@ -17,9 +17,9 @@ namespace BOIFPS
         readonly List<TextMeshProUGUI> map = new List<TextMeshProUGUI>();
         float hitTime, confirmTime, shotTime;
         TextMeshProUGUI relicEvents;
-        readonly float[] relicUntil=new float[12], relicLast=new float[12];
-        readonly string[] relicMessage=new string[12];
-        readonly int[] relicCount=new int[12];
+        readonly float[] relicUntil=new float[DungeonGame.ItemNames.Length], relicLast=new float[DungeonGame.ItemNames.Length];
+        readonly string[] relicMessage=new string[DungeonGame.ItemNames.Length];
+        readonly int[] relicCount=new int[DungeonGame.ItemNames.Length];
         public string LastRelicFeedback { get; private set; }
         float acquiredUntil;
         string acquiredMessage;
@@ -47,10 +47,24 @@ namespace BOIFPS
             hint = Text("Interaction", transform, new Vector2(0, 215), new Vector2(1100, 60), 26, new Vector2(.5f, 0)); hint.alignment = TextAlignmentOptions.Center;
             crosshair = Text("Réticule", transform, Vector2.zero, new Vector2(80, 80), 30, new Vector2(.5f, .5f)); crosshair.alignment = TextAlignmentOptions.Center; crosshair.text = "+";
             direction = Text("Impact", transform, new Vector2(0, -90), new Vector2(500, 70), 24, new Vector2(.5f, .5f)); direction.alignment = TextAlignmentOptions.Center;
-            for (int i = 0; i < 12; i++)
+            var dungeon=DungeonGame.Instance;
+            var bounds=new Bounds(Vector3.zero,Vector3.zero);
+            foreach(var tile in dungeon.Rooms) bounds.Encapsulate(tile.transform.position);
+            float scale=Mathf.Min(1,220/Mathf.Max(1,bounds.size.x,bounds.size.z));
+            for(int i=0;i<dungeon.Rooms.Count;i++)
             {
-                Vector2 p = i < 10 ? new Vector2(-180, -40 - (9 - i) * 25) : new Vector2(-180 + (i - 9) * 55, -40 - 4 * 25);
-                var label = Text("Carte " + i, transform, p, new Vector2(55, 25), 18, Vector2.one); label.text = i == 9 ? "BOSS" : i == 4 || i == 11 ? "R" : i == 10 ? "F" : i.ToString(); map.Add(label);
+                var tile=dungeon.Rooms[i]; Vector3 delta=tile.transform.position-bounds.max;
+                Vector2 pos=new Vector2(-30+delta.x*scale,-30+delta.z*scale);
+                if(i>0)
+                {
+                    var parent=dungeon.Rooms[dungeon.Parents[i]].transform.position-tile.transform.position;
+                    var link=Text("Passage",transform,pos+new Vector2(parent.x,parent.z)*scale*.5f,new Vector2(20,20),13,Vector2.one);
+                    link.text=parent.x==0?"|":"–"; link.alignment=TextAlignmentOptions.Center;
+                }
+                var label=Text(tile.name,transform,pos,new Vector2(20,20),14,Vector2.one);
+                label.alignment=TextAlignmentOptions.Center;
+                label.text=tile.Index==9?"B":tile.Index==0?"E":tile.Index==4 || tile.Index==11?"R":tile.Index==8?"+":"●";
+                map.Add(label);
             }
             var flash = new GameObject("Dégâts", typeof(RectTransform), typeof(UnityEngine.UI.Image)); flash.transform.SetParent(transform, false);
             damageFlash = flash.GetComponent<UnityEngine.UI.Image>(); damageFlash.color = Color.clear; damageFlash.raycastTarget = false;
@@ -65,12 +79,12 @@ namespace BOIFPS
             room.text = (g.Current == null ? "Les Fosses de la Communion" : g.Current.name) + (g.Current != null && g.Current.Active ? "  —  COMBAT" : "");
             string acquired = ""; for(int n=0;n<DungeonGame.ItemNames.Length;n++) if(g.Upgrades.Contains(n))
                 acquired += "<color=#"+ColorUtility.ToHtmlStringRGB(DungeonRelics.ColorFor(n))+">"+DungeonGame.ItemNames[n]+"</color>   ";
-            items.text = "RELIQUES  " + (acquired.Length == 0 ? "Aucune" : acquired) + $"\nSalles nettoyées : {g.Cleared}/7   •   {Mathf.FloorToInt(g.Elapsed / 60):00}:{Mathf.FloorToInt(g.Elapsed % 60):00}";
+            items.text = "RELIQUES  " + (acquired.Length == 0 ? "Aucune" : acquired) + $"\nSalles nettoyées : {g.Cleared}/{g.CombatTotal}   •   {Mathf.FloorToInt(g.Elapsed / 60):00}:{Mathf.FloorToInt(g.Elapsed % 60):00}";
             relicEvents.text=Time.time<acquiredUntil?acquiredMessage:"";
             if(Time.time>=acquiredUntil)
             {
                 int shown=0;
-                for(int n=0;n<12 && shown<3;n++) if(relicUntil[n]>Time.time)
+                for(int n=0;n<DungeonGame.ItemNames.Length && shown<3;n++) if(relicUntil[n]>Time.time)
                 {
                     relicEvents.text+="<color=#"+ColorUtility.ToHtmlStringRGB(DungeonRelics.ColorFor(n))+">"+DungeonGame.ItemNames[n]+"</color> — "+relicMessage[n]+"\n"; shown++;
                 }
@@ -132,7 +146,7 @@ namespace BOIFPS
         {
             if (!visible) { Close(); return; }
             var g = DungeonGame.Instance;
-            Panel("PAUSE", "Les Fosses de la Communion");
+            Panel("PAUSE", "Graine du donjon "+g.Seed);
             Button("Reprendre", 400, () => { Close(); g.SetPaused(false); });
             Button($"Sensibilité : {g.Sensitivity:0.00} — cliquer pour changer", 480, () => { g.Sensitivity = g.Sensitivity >= .2f ? .05f : g.Sensitivity + .05f; ShowPause(true); });
             Button($"Champ de vision : {g.FieldOfView:0}° — cliquer pour changer", 560, () => { g.FieldOfView = g.FieldOfView >= 110 ? 80 : g.FieldOfView + 5; ShowPause(true); });
@@ -142,7 +156,7 @@ namespace BOIFPS
             Button("Quitter", 880, Quit);
             var inventory=Text("Effets des reliques",overlay,new Vector2(30,-310),new Vector2(390,700),20,new Vector2(0,1));
             inventory.text="RELIQUES ÉQUIPÉES\n\n";
-            for(int id=0;id<12;id++) if(g.Upgrades.Contains(id)) inventory.text+="<color=#"+ColorUtility.ToHtmlStringRGB(DungeonRelics.ColorFor(id))+">"+DungeonGame.ItemNames[id]+"</color>\n"+DungeonGame.ItemDescriptions[id]+"\n\n";
+            for(int id=0;id<DungeonGame.ItemNames.Length;id++) if(g.Upgrades.Contains(id)) inventory.text+="<color=#"+ColorUtility.ToHtmlStringRGB(DungeonRelics.ColorFor(id))+">"+DungeonGame.ItemNames[id]+"</color>\n"+DungeonGame.ItemDescriptions[id]+"\n\n";
         }
         static void Quit()
         {
@@ -185,7 +199,7 @@ namespace BOIFPS
         {
             var g = DungeonGame.Instance;
             string acquired = ""; foreach (int i in g.Upgrades) acquired += DungeonGame.ItemNames[i] + "   ";
-            Panel(won ? "LA CLOCHE S’EST TUE" : "LES FOSSES VOUS ONT GARDÉ", $"{(won ? "Victoire" : "Mort")}   •   {g.Elapsed / 60:0.0} minutes   •   {g.Cleared}/7 salles nettoyées\nReliques : {(acquired.Length == 0 ? "aucune" : acquired)}");
+            Panel(won ? "LA CLOCHE S’EST TUE" : "LES FOSSES VOUS ONT GARDÉ", $"{(won ? "Victoire" : "Mort")}   •   {g.Elapsed / 60:0.0} minutes   •   {g.Cleared}/{g.CombatTotal} salles nettoyées\nReliques : {(acquired.Length == 0 ? "aucune" : acquired)}");
             Button("Nouvelle descente", 480, g.Restart); Button("Quitter", 580, Quit);
         }
     }
